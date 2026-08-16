@@ -8,7 +8,7 @@
 // 1. CONFIGURATION & CONSTANTS
 // ==========================================
 
-const MASTER_6DIGIT_PIN = "993600";
+const MASTER_6DIGIT_PIN = "111987";
 const CLOUD_GARAGE_URL = "https://kvdb.io/NoTM4bJXjrCUgQWLBcgR3F/kkpd_garage_master";
 const STORAGE_KEY = "kkpd_garage_master_vehicles_v1";
 
