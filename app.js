@@ -553,6 +553,7 @@ function renderFullState() {
     PARTICIPANTS.forEach(p => {
       const isSubmitted = !!state.preferences[p.id];
       const isCurrentlySelected = state.selectedPlayerId === p.id;
+      const displayName = p.name.replace(/^\[kkpd\]\s*/i, '').trim();
       const chip = document.createElement("div");
       chip.className = `roster-status-chip ${isCurrentlySelected ? 'active-selected' : ''}`;
       chip.dataset.playerId = p.id;
@@ -561,7 +562,7 @@ function renderFullState() {
       chip.innerHTML = `
         <div class="chip-player-left">
           <span class="chip-rank-badge">#${p.rank}</span>
-          <span class="chip-player-name">${p.name}</span>
+          <span class="chip-player-name">${displayName}</span>
         </div>
         <div class="chip-status-badge ${isSubmitted ? 'submitted' : 'pending'}">
           <span class="status-dot ${isSubmitted ? 'dot-green' : 'dot-red'}"></span>
