@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KKPD Prize Selection | ระบบจัดสรรของรางวัลตามลำดับ 1-20</title>
+  <meta name="description" content="ระบบเลือกและจัดสรรของรางวัล (รถ 20 คัน) สำหรับผู้เข้าร่วม 20 คน เรียงตามสิทธิ์อันดับ 1-20">
+  
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <!-- Google Fonts: Prompt & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css?v=2.2">
+</head>
+<body>
+  <div class="app-background">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="brand-badge">
+          <i class="fa-solid fa-trophy"></i>
+          <span>KKPD SPECIAL EVENT ครั้งที่ 8</span>
+        </div>
+        <h1 class="main-title">ระบบจัดสรรของรางวัลตามลำดับ</h1>
+        <p class="main-subtitle">
+          ผู้เข้าร่วม 20 คน (อันดับ 1 - 20) • ของรางวัลรถ 20 คัน • ระบบจัดสรรอัตโนมัติตามสิทธิ์ความต้องการ
+        </p>
+      </div>
+
+      <div class="header-stats">
+        <div class="stat-card cloud-sync-card" id="cloudSyncStatusCard" title="สถานะการซิงค์ข้อมูลกับผู้เล่นคนอื่นทั่วโลก">
+          <div class="stat-icon cloud-stat"><i class="fa-solid fa-cloud-arrow-up" id="cloudIcon"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">ระบบ Cloud Real-time</span>
+            <div class="stat-value cloud-status-text" id="cloudStatusText">ออนไลน์ ✓</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">ส่งความต้องการแล้ว</span>
+            <div class="stat-value"><span id="submittedCount">0</span><span class="stat-total">/20</span></div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon car-stat"><i class="fa-solid fa-car"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">ของรางวัลทั้งหมด</span>
+            <div class="stat-value">20 <span class="stat-unit">คัน</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="tab-form" id="tabBtnForm">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span>1. ส่งลำดับความชอบ (ผู้เล่น)</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-results" id="tabBtnResults">
+        <i class="fa-solid fa-square-poll-vertical"></i>
+        <span>2. กระดานจัดสรรรางวัล (Live)</span>
+        <span class="tab-badge" id="resultsBadge">Live</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-admin" id="tabBtnAdmin">
+        <i class="fa-solid fa-sliders"></i>
+        <span>3. จัดการ & สรุปผล (Admin)</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-masterdata" id="tabBtnMasterData">
+        <i class="fa-solid fa-database"></i>
+        <span>4. ข้อมูลการครอบครองรถ</span>
+      </button>
+      <a href="index.html" class="tab-link-btn" title="กลับสู่หน้าหลักฐานข้อมูลทะเบียนรถตำรวจ">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>หน้าหลักฐานข้อมูลทะเบียนรถ (Master Garage) ↗</span>
+      </a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content-wrapper">
+      
+      <!-- ================= TAB 1: PLAYER PREFERENCE FORM ================= -->
+      <section id="tab-form" class="tab-content active">
+        <div class="section-hero">
+          <div class="hero-text">
+            <h2><i class="fa-solid fa-list-ol"></i> เลือกชื่อและจัดลำดับความอยากได้ 1 - 6</h2>
+            <p>
+              เลือกชื่อของคุณ จากนั้นลากหรือคลิกลูกศรเพื่อจัดลำดับรถที่อยากได้ที่สุดเป็น <strong>อันดับ 1</strong> ลงมาถึง <strong>อันดับ 6</strong><br>
+              <span class="text-highlight"><i class="fa-solid fa-circle-info"></i> หากรถอันดับแรกที่คุณเลือกถูกคนอันดับสูงกว่าเลือกจนหมด ระบบจะข้ามไปเลือกรถอันดับถัดไปของคุณให้อัตโนมัติ</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Roster Submission Status Section (Overview of 20 Players) -->
+        <div class="roster-status-section">
+          <div class="roster-status-header">
+            <div class="roster-status-title">
+              <i class="fa-solid fa-users-viewfinder"></i>
+              <h3>สถานะการส่งข้อมูลของผู้เข้าร่วม 20 ลำดับ</h3>
+            </div>
+            <div class="roster-status-legend">
+              <span class="legend-item"><span class="status-dot dot-green"></span> เลือกแล้ว (<span id="legendDoneCount">0</span>)</span>
+              <span class="legend-item"><span class="status-dot dot-red"></span> ยังไม่ได้เลือก (<span id="legendPendingCount">20</span>)</span>
+            </div>
+          </div>
+
+          <div class="roster-chips-grid" id="rosterChipsGrid">
+            <!-- 20 compact player cards rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <!-- Step 1: Select Player -->
+          <div class="step-card step-player-select">
+            <div class="step-header">
+              <span class="step-num">1</span>
+              <div>
+                <h3>เลือกรายชื่อของคุณ</h3>
+                <p>เลือกตามลำดับสิทธิ์ของคุณในรายการ 20 คน</p>
+              </div>
+            </div>
+
+            <div class="player-select-box">
+              <label for="playerSelect" class="form-label">
+                <i class="fa-solid fa-user-tag"></i> 1. ค้นหาหรือเลือกชื่อของคุณ
+              </label>
+              <div class="custom-select-wrapper">
+                <select id="playerSelect" class="styled-select">
+                  <option value="" disabled selected>-- กรุณาเลือกชื่อของคุณจาก 20 ลำดับ --</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+              </div>
+
+              <!-- 4-Digit PIN Security Box -->
+              <div id="pinSecurityBox" class="pin-security-box hidden">
+                <label for="playerPinInput" class="form-label">
+                  <i class="fa-solid fa-shield-halved"></i> 2. กรอกรหัส PIN 4 หลัก (เพื่อยืนยันตัวตน)
+                </label>
+                <div class="pin-input-row">
+                  <div class="pin-input-wrapper">
+                    <i class="fa-solid fa-key pin-icon"></i>
+                    <input type="password" id="playerPinInput" class="styled-input pin-input" maxlength="4" placeholder="••••" inputmode="numeric" autocomplete="off">
+                  </div>
+                  <button id="btnVerifyPin" class="btn-primary">
+                    <i class="fa-solid fa-lock-open"></i> ยืนยัน PIN
+                  </button>
+                </div>
+                <div id="pinErrorMessage" class="pin-error-msg hidden">
+                  <i class="fa-solid fa-triangle-exclamation"></i> รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่หรือติดต่อแอดมิน
+                </div>
+              </div>
+
+              <!-- Selected Player Info Card -->
+              <div id="playerInfoBanner" class="player-info-banner hidden">
+                <div class="banner-rank">
+                  <span class="rank-label">ลำดับสิทธิ์</span>
+                  <span class="rank-number" id="bannerRankNum">#1</span>
+                </div>
+                <div class="banner-details">
+                  <h4 id="bannerPlayerName">[KKPD] Name</h4>
+                  <div class="banner-status-tag" id="bannerStatusTag">
+                    <i class="fa-regular fa-clock"></i> ยังไม่ได้ส่งข้อมูล
+                  </div>
+                </div>
+                <div class="banner-auth-badge" id="bannerAuthBadge">
+                  <i class="fa-solid fa-circle-check"></i> ยืนยันสิทธิ์แล้ว
+                </div>
+              </div>
+            </div>
+
+            <!-- Car Stock Quick Reference -->
+            <div class="car-stock-mini">
+              <h4><i class="fa-solid fa-warehouse"></i> โควตารถของรางวัลทั้งหมด (20 คัน)</h4>
+              <div class="stock-chips-grid" id="stockChipsGrid">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Rank Choices -->
+          <div class="step-card step-ranking">
+            <div class="step-header">
+              <span class="step-num">2</span>
+              <div>
+                <h3>จัดลำดับความต้องการรถทั้ง 6 รุ่น</h3>
+                <p>ลากสลับตำแหน่ง หรือใช้ปุ่ม <i class="fa-solid fa-arrow-up"></i> <i class="fa-solid fa-arrow-down"></i> เพื่อเลื่อนลำดับ</p>
+              </div>
+            </div>
+
+            <div class="ranking-instruction">
+              <div class="instruction-badge top-choice">
+                <i class="fa-solid fa-crown"></i> <strong>อันดับ 1</strong> คือคันที่ต้องการมากที่สุด (ระบบจะพยายามเลือกคันนี้ให้ก่อน)
+              </div>
+            </div>
+
+            <!-- Ranking List (Drag & Drop + Arrow buttons) -->
+            <div class="ranking-list" id="rankingList">
+              <!-- Dynamically populated with 6 car cards -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+              <button id="btnSubmitPreference" class="btn-primary btn-large" disabled>
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>บันทึกและส่งลำดับความต้องการ</span>
+              </button>
+              <button id="btnResetMyChoices" class="btn-secondary">
+                <i class="fa-solid fa-rotate-left"></i> รีเซ็ตลำดับ
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Modal / Overlay Receipt -->
+        <div id="receiptModal" class="modal-overlay hidden">
+          <div class="modal-card">
+            <div class="modal-icon success">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3>บันทึกข้อมูลเรียบร้อยแล้ว!</h3>
+            <p id="receiptPlayerDesc">ลำดับความชอบของคุณถูกบันทึกเข้าสู่ระบบแล้ว</p>
+            
+            <div class="receipt-summary-box" id="receiptSummaryBox">
+              <!-- Summary items -->
+            </div>
+
+            <div class="modal-actions">
+              <button id="btnCloseReceipt" class="btn-primary">
+                <i class="fa-solid fa-chart-pie"></i> ไปดูหน้ากระดานจัดสรรรางวัล
+              </button>
+              <button id="btnEditReceipt" class="btn-secondary">
+                <i class="fa-solid fa-pen"></i> แก้ไขข้อมูล
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: LIVE ALLOCATION BOARD ================= -->
+      <section id="tab-results" class="tab-content">
+        <div class="section-hero">
+          <div class="hero-text">
+            <h2><i class="fa-solid fa-trophy"></i> กระดานผลการจัดสรรของรางวัล (Priority Allocation)</h2>
+            <p>
+              ระบบประมวลผลตามสิทธิ์อันดับ 1 ถึง 20 แบบ Real-time ตามความต้องการที่แต่ละคนส่งเข้ามา
+            </p>
+          </div>
+          <div class="hero-controls">
+            <button id="btnSimulateAnim" class="btn-secondary btn-sm">
+              <i class="fa-solid fa-play"></i> เล่นจำลองการเลือก (Animation)
+            </button>
+            <button id="btnQuickCopyDiscord" class="btn-accent btn-sm">
+              <i class="fa-brands fa-discord"></i> คัดลอกผลลง Discord
+            </button>
+          </div>
+        </div>
+
+        <!-- Remaining Stock Status Bar -->
+        <div class="stock-overview-section">
+          <div class="section-title-sm">
+            <span><i class="fa-solid fa-boxes-stacked"></i> สต็อกรถคงเหลือปัจจุบัน (Remaining Pool)</span>
+            <span class="stock-status-tag" id="stockStatusTag">จัดสรรแล้ว 0 / 20 คัน</span>
+          </div>
+          <div class="stock-cards-grid" id="stockCardsGrid">
+            <!-- Stock cards dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- Allocation Results Layout -->
+        <div class="results-layout">
+          <!-- Step-by-Step Resolution Timeline -->
+          <div class="results-main">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fa-solid fa-timeline"></i>
+                <h3>การจัดสรรทีละลำดับ (อันดับ 1 ➡️ 20)</h3>
+              </div>
+              <div class="filter-controls">
+                <span class="filter-hint">แสดงผลการตัดสินใจของแต่ละคน</span>
+              </div>
+            </div>
+
+            <div class="allocation-timeline" id="allocationTimeline">
+              <!-- Dynamically populated 20 player cards with resolution details -->
+            </div>
+          </div>
+
+          <!-- Summary Distribution by Car -->
+          <aside class="results-sidebar">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i class="fa-solid fa-car-side"></i>
+                <h3>สรุปผู้ได้รับรถแต่ละรุ่น</h3>
+              </div>
+            </div>
+
+            <div class="car-roster-list" id="carRosterList">
+              <!-- Grouped list of who got each car -->
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: ADMIN & SETTINGS ================= -->
+      <section id="tab-admin" class="tab-content">
+        <!-- Admin Gate / Lock Screen (Shown when not authenticated) -->
+        <div id="adminLockScreen" class="admin-lock-screen">
+          <div class="lock-card">
+            <div class="lock-icon">
+              <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h3>เข้าสู่ระบบผู้ดูแลระบบ (Admin Access)</h3>
+            <p>กรุณากรอกรหัสผ่าน Admin เพื่อดูข้อมูล PIN รายบุคคล, จัดการสมาชิก, และส่งออกข้อมูล</p>
+            
+            <div class="admin-auth-form">
+              <div class="pin-input-wrapper" style="max-width: 240px; margin: 0 auto 16px;">
+                <i class="fa-solid fa-key pin-icon"></i>
+                <input type="password" id="adminPasswordInput" class="styled-input pin-input" maxlength="8" placeholder="••••" autocomplete="off">
+              </div>
+              <div class="admin-lock-actions">
+                <button id="btnUnlockAdmin" class="btn-primary btn-large">
+                  <i class="fa-solid fa-lock-open"></i> ยืนยันรหัสผ่าน
+                </button>
+              </div>
+              <div id="adminPasswordError" class="pin-error-msg hidden" style="justify-content: center; margin-top: 12px;">
+                <i class="fa-solid fa-triangle-exclamation"></i> รหัสผ่าน Admin ไม่ถูกต้อง
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Dashboard Content (Hidden until authenticated) -->
+        <div id="adminDashboardContent" class="admin-dashboard-content hidden">
+          <div class="section-hero">
+            <div class="hero-text">
+              <h2><i class="fa-solid fa-sliders"></i> แผงควบคุมและจัดการข้อมูล (Admin Dashboard)</h2>
+              <p>
+                กรอกข้อมูลแทนผู้เล่น, สุ่มข้อมูลตัวอย่างทดสอบระบบ, และคัดลอกข้อความสรุปสำหรับประกาศ
+              </p>
+            </div>
+            <div class="hero-controls">
+              <button id="btnLogoutAdmin" class="btn-sm btn-danger">
+                <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ Admin
+              </button>
+            </div>
+          </div>
+
+          <!-- Admin Quick Actions -->
+          <div class="admin-actions-bar">
+            <div class="action-group">
+              <button id="btnManualCloudSync" class="btn-secondary" title="ดึงข้อมูลล่าสุดจาก Cloud ทันที">
+                <i class="fa-solid fa-arrows-rotate"></i> ซิงค์ Cloud ตอนนี้
+              </button>
+              <button id="btnGenerateDemo" class="btn-primary">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> สุ่มข้อมูลตัวอย่างครบ 20 คน (Demo)
+              </button>
+              <button id="btnCopyAnnouncement" class="btn-accent">
+                <i class="fa-solid fa-copy"></i> คัดลอกข้อความสรุปผล (Discord / FiveM)
+              </button>
+              <button id="btnExportJSON" class="btn-secondary">
+                <i class="fa-solid fa-file-export"></i> ส่งออกข้อมูล (JSON)
+              </button>
+            </div>
+            <div class="action-group">
+              <button id="btnResetAll" class="btn-danger">
+                <i class="fa-solid fa-trash-can"></i> ล้างข้อมูลทั้งหมด (Reset)
+              </button>
+            </div>
+          </div>
+
+          <!-- Participants Management Table -->
+          <div class="admin-table-container">
+            <div class="table-header">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <div>
+                  <h3><i class="fa-solid fa-users-gear"></i> สถานะและรหัส PIN ผู้เข้าร่วมทั้ง 20 คน</h3>
+                  <span class="table-subtitle">รหัส PIN สุ่มแบบไม่ซ้ำกัน ปลอดภัยจากการคาดเดา</span>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button id="btnRegeneratePins" class="btn-sm btn-secondary" title="สุ่มรหัส PIN 4 หลักใหม่ทั้งหมด">
+                    <i class="fa-solid fa-shuffle"></i> สุ่ม PIN ใหม่ทั้งหมด
+                  </button>
+                  <button id="btnCopyAllPins" class="btn-sm btn-accent">
+                    <i class="fa-solid fa-clipboard-list"></i> คัดลอกรายชื่อ + รหัส PIN ทั้งหมด
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 70px;">อันดับ</th>
+                    <th>ชื่อผู้เข้าร่วม</th>
+                    <th style="width: 110px;">รหัส PIN 4 ตัว</th>
+                    <th style="width: 120px;">สถานะการส่ง</th>
+                    <th>ลำดับความชอบ (1st ➡️ 6th)</th>
+                    <th style="width: 150px;">รถที่ได้รับการจัดสรร</th>
+                    <th style="width: 120px; text-align: center;">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                  <!-- Dynamically populated 20 rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Announcement Preview Box -->
+          <div class="announcement-preview-box">
+            <div class="preview-header">
+              <h4><i class="fa-solid fa-bullhorn"></i> ตัวอย่างข้อความประกาศ (Announcement Format)</h4>
+              <button id="btnCopyPreviewText" class="btn-sm btn-accent">
+                <i class="fa-solid fa-copy"></i> คัดลอก
+              </button>
+            </div>
+            <pre id="announcementText" class="code-preview">กดปุ่มสุ่มข้อมูล หรือรอให้สมาชิกส่งข้อมูลครบเพื่อดูตัวอย่างข้อความประกาศ...</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: Master Vehicle Ownership Database -->
+      <section id="tab-masterdata" class="tab-content">
+        <div class="section-hero">
+          <div class="hero-text">
+            <h2><i class="fa-solid fa-shield-halved"></i> ฐานข้อมูลทะเบียนรถเจ้าหน้าที่ตำรวจ KK TOWN</h2>
+            <p>
+              รวบรวมข้อมูลการถือครองรถทั้งหมด <strong>427 คัน</strong> จาก <strong>306 นาย</strong> (เจ้าหน้าที่ตำรวจ KK TOWN ครบทุกรุ่น และผลลัพธ์จากกิจกรรมล่าสุด)
+            </p>
+          </div>
+          <div class="hero-controls">
+            <button id="btnCopyMasterDiscord" class="btn-accent">
+              <i class="fa-solid fa-copy"></i> คัดลอกสรุปสำหรับ Discord
+            </button>
+            <button id="btnExportMasterCSV" class="btn-secondary">
+              <i class="fa-solid fa-file-csv"></i> ส่งออกไฟล์ CSV (427 คัน)
+            </button>
+          </div>
+        </div>
+
+        <!-- Master Data Stats Grid -->
+        <div class="master-stats-grid">
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-cyan); background:rgba(0,240,255,0.12)"><i class="fa-solid fa-car-side"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">รถในระบบทั้งหมด</span>
+              <div class="master-stat-val" id="statTotalCars">427 <small>คัน</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-purple); background:rgba(168,85,247,0.12)"><i class="fa-solid fa-user-shield"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">จำนวนเจ้าหน้าที่ตำรวจ</span>
+              <div class="master-stat-val" id="statTotalMembers">306 <small>นาย</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-amber); background:rgba(245,158,11,0.12)"><i class="fa-solid fa-trophy"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">จากกิจกรรม Event ครั้งที่ 8</span>
+              <div class="master-stat-val">20 <small>คัน</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-emerald); background:rgba(16,185,129,0.12)"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">เจ้าหน้าที่ถือครอง 2+ คัน</span>
+              <div class="master-stat-val" id="statMultiCarMembers">68 <small>นาย</small></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Car Model Badges Row -->
+        <div class="master-car-badges-row" id="masterCarBadgesRow">
+          <!-- Populated dynamically with all car models -->
+        </div>
+
+        <!-- Master Data Search & Filter Controls -->
+        <div class="master-filter-card">
+          <div class="master-search-row">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="masterSearchInput" class="styled-input search-input" placeholder="🔍 ค้นหาชื่อเจ้าหน้าที่ตำรวจ, เลขทะเบียน (เช่น KKPD 407, 00, 111), ทะเบียนเดิม, หรือรุ่นรถ...">
+              <button id="btnClearSearch" class="btn-clear-search hidden"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="master-view-toggle">
+              <button id="btnViewVehicles" class="btn-toggle active" title="มุมมองทะเบียนรถทั้งหมด 427 คัน">
+                <i class="fa-solid fa-list-ol"></i> ทะเบียนรถทั้งหมด (<span id="countViewVehicles">427</span>)
+              </button>
+              <button id="btnViewMembers" class="btn-toggle" title="มุมมองสรุปรายชื่อเจ้าหน้าที่ตำรวจ">
+                <i class="fa-solid fa-user-shield"></i> แยกตามรายชื่อเจ้าหน้าที่ (<span id="countViewMembers">306</span>)
+              </button>
+              <button id="btnViewModel" class="btn-toggle" title="มุมมองแยกตามรุ่นรถ">
+                <i class="fa-solid fa-grip"></i> แยกตามรุ่นรถ (<span id="countViewModel">14</span>)
+              </button>
+            </div>
+          </div>
+
+          <div class="master-filter-chips" id="masterFilterChips">
+            <!-- Dynamically generated filter chips -->
+          </div>
+        </div>
+
+        <!-- View 1: All Vehicles List (427 Cars) -->
+        <div id="masterVehiclesView" class="master-view-container">
+          <div class="table-container">
+            <table class="styled-table master-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px; text-align: center;">ลำดับ</th>
+                  <th style="width: 140px; text-align: center;">ป้ายทะเบียน</th>
+                  <th style="width: 160px;">รุ่นรถ</th>
+                  <th>ชื่อเจ้าหน้าที่ตำรวจ</th>
+                  <th style="width: 130px; text-align: center;">ทะเบียนเดิม (เกมสุ่ม)</th>
+                  <th style="width: 160px;">ที่มา / หมายเหตุ</th>
+                </tr>
+              </thead>
+              <tbody id="masterVehiclesTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- View 2: Grouped by Member Summary (306 Members) -->
+        <div id="masterMembersView" class="master-view-container hidden">
+          <div class="table-container">
+            <table class="styled-table master-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px; text-align: center;">ลำดับ</th>
+                  <th>รายชื่อเจ้าหน้าที่ตำรวจ</th>
+                  <th style="width: 110px; text-align: center;">จำนวนรถ</th>
+                  <th>รายการรถและป้ายทะเบียนที่ครอบครอง</th>
+                  <th style="width: 160px;">ที่มา</th>
+                </tr>
+              </thead>
+              <tbody id="masterMembersTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- View 3: Grouped by Car Model Grid (14 Models) -->
+        <div id="masterModelView" class="master-view-container hidden">
+          <div class="model-roster-grid" id="modelRosterGrid">
+            <!-- Populated dynamically with 14 model cards -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="footer-content">
+        <p>🏆 KKPD Prize Selection System • พัฒนาขึ้นสำหรับการจัดสรรของรางวัล 20 อันดับอย่างเป็นธรรมและโปร่งใส</p>
+        <div class="footer-links">
+          <button id="btnSoundToggle" class="btn-icon" title="เปิด/ปิดเสียงเอฟเฟกต์">
+            <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+          </button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Admin Edit Player Modal -->
+  <div id="adminEditModal" class="modal-overlay hidden">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3 id="adminModalTitle">แก้ไขลำดับความชอบ: [KKPD] Player</h3>
+        <button id="btnCloseAdminModal" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="admin-modal-pin-section" style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
+          <label for="adminEditPinInput" class="form-label">
+            <i class="fa-solid fa-key"></i> รหัส PIN 4 หลักของผู้เล่นคนนี้:
+          </label>
+          <input type="text" id="adminEditPinInput" class="styled-input" maxlength="4" style="max-width: 160px; font-family: var(--font-heading); font-size: 1.1rem; letter-spacing: 2px; text-align: center;">
+        </div>
+
+        <p class="modal-desc">จัดลำดับรถ 1 ถึง 6 สำหรับผู้เล่นคนนี้:</p>
+        <div class="ranking-list" id="adminRankingList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnSaveAdminEdit" class="btn-primary">
+          <i class="fa-solid fa-check"></i> บันทึกการแก้ไข
+        </button>
+        <button id="btnCancelAdminEdit" class="btn-secondary">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=2.3"></script>
+</body>
+</html>
