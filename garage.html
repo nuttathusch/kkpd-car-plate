@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KKPD Gang | ฐานข้อมูลทะเบียนรถ & โรงรถส่วนกลาง (Master Garage)</title>
-  <meta name="description" content="ระบบฐานข้อมูลการครอบครองรถและป้ายทะเบียนรถสมาชิกแก๊ง KKPD ครบถ้วนทุกรุ่น พร้อมระบบลงทะเบียนรถใหม่">
+  <title>KKPD Police | ฐานข้อมูลทะเบียนรถเจ้าหน้าที่ตำรวจ KK TOWN (Master Garage)</title>
+  <meta name="description" content="ระบบฐานข้อมูลการครอบครองรถและป้ายทะเบียนรถเจ้าหน้าที่ตำรวจ KKPD (KK TOWN) ครบถ้วนทุกรุ่น พร้อมระบบลงทะเบียนรถใหม่">
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -18,7 +18,7 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
-  <link rel="stylesheet" href="style.css?v=2.3">
+  <link rel="stylesheet" href="style.css?v=2.4">
 </head>
 <body>
   <div class="app-background">
@@ -32,12 +32,12 @@
     <header class="main-header">
       <div class="header-brand">
         <div class="brand-badge" style="background: rgba(0, 240, 255, 0.12); color: var(--accent-cyan); border-color: rgba(0, 240, 255, 0.3);">
-          <i class="fa-solid fa-car-tunnel"></i>
-          <span>KKPD MASTER GARAGE & VEHICLE REGISTRY</span>
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>KKPD POLICE • MASTER VEHICLE REGISTRY</span>
         </div>
-        <h1 class="main-title">ฐานข้อมูลทะเบียนรถสมาชิกแก๊ง</h1>
+        <h1 class="main-title">ฐานข้อมูลทะเบียนรถเจ้าหน้าที่ตำรวจ KK TOWN</h1>
         <p class="main-subtitle">
-          รวบรวมข้อมูลรถทุกรุ่น ป้ายทะเบียน และผู้ถือครองทั้งหมดในแก๊ง KKPD พร้อมระบบรันเลขทะเบียนใหม่อัตโนมัติ
+          รวบรวมข้อมูลรถทุกรุ่น ป้ายทะเบียน และเจ้าหน้าที่ตำรวจผู้ถือครองทั้งหมดในหน่วยงาน KKPD (KK TOWN) พร้อมระบบรันเลขทะเบียนใหม่อัตโนมัติ
         </p>
       </div>
 
@@ -104,10 +104,10 @@
             </div>
           </div>
           <div class="master-stat-card">
-            <div class="master-stat-icon" style="color:var(--accent-purple); background:rgba(168,85,247,0.12)"><i class="fa-solid fa-users"></i></div>
+            <div class="master-stat-icon" style="color:var(--accent-purple); background:rgba(168,85,247,0.12)"><i class="fa-solid fa-user-shield"></i></div>
             <div class="master-stat-info">
-              <span class="master-stat-label">จำนวนผู้ครอบครอง</span>
-              <div class="master-stat-val" id="statTotalMembers">306 <small>คน</small></div>
+              <span class="master-stat-label">จำนวนเจ้าหน้าที่ตำรวจ</span>
+              <div class="master-stat-val" id="statTotalMembers">306 <small>นาย</small></div>
             </div>
           </div>
           <div class="master-stat-card">
@@ -120,8 +120,8 @@
           <div class="master-stat-card">
             <div class="master-stat-icon" style="color:var(--accent-emerald); background:rgba(16,185,129,0.12)"><i class="fa-solid fa-layer-group"></i></div>
             <div class="master-stat-info">
-              <span class="master-stat-label">สมาชิกที่ถือครอง 2+ คัน</span>
-              <div class="master-stat-val" id="statMultiCarMembers">68 <small>คน</small></div>
+              <span class="master-stat-label">เจ้าหน้าที่ถือครอง 2+ คัน</span>
+              <div class="master-stat-val" id="statMultiCarMembers">68 <small>นาย</small></div>
             </div>
           </div>
         </div>
@@ -136,15 +136,15 @@
           <div class="master-search-row">
             <div class="search-input-wrapper">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" id="masterSearchInput" class="styled-input search-input" placeholder="🔍 ค้นหาชื่อสมาชิก, เลขทะเบียน (เช่น KKPD 407, 00, 111), ทะเบียนเดิม, หรือรุ่นรถ...">
+              <input type="text" id="masterSearchInput" class="styled-input search-input" placeholder="🔍 ค้นหาชื่อเจ้าหน้าที่ตำรวจ, เลขทะเบียน (เช่น KKPD 407, 00, 111), ทะเบียนเดิม, หรือรุ่นรถ...">
               <button id="btnClearSearch" class="btn-clear-search hidden"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="master-view-toggle">
               <button id="btnViewVehicles" class="btn-toggle active" title="มุมมองทะเบียนรถทั้งหมด">
                 <i class="fa-solid fa-list-ol"></i> ทะเบียนรถทั้งหมด (<span id="countViewVehicles">427</span>)
               </button>
-              <button id="btnViewMembers" class="btn-toggle" title="มุมมองสรุปรายชื่อสมาชิก">
-                <i class="fa-solid fa-users"></i> แยกตามสมาชิก (<span id="countViewMembers">306</span>)
+              <button id="btnViewMembers" class="btn-toggle" title="มุมมองสรุปรายชื่อเจ้าหน้าที่ตำรวจ">
+                <i class="fa-solid fa-user-shield"></i> แยกตามรายชื่อเจ้าหน้าที่ (<span id="countViewMembers">306</span>)
               </button>
               <button id="btnViewModel" class="btn-toggle" title="มุมมองแยกตามรุ่นรถ">
                 <i class="fa-solid fa-grip"></i> แยกตามรุ่นรถ (<span id="countViewModel">14</span>)
@@ -166,7 +166,7 @@
                   <th style="width: 60px; text-align: center;">ลำดับ</th>
                   <th style="width: 130px; text-align: center;">ป้ายทะเบียน</th>
                   <th style="width: 160px;">รุ่นรถ</th>
-                  <th>ชื่อผู้ครอบครอง</th>
+                  <th>ชื่อเจ้าหน้าที่ตำรวจ</th>
                   <th style="width: 140px; text-align: center;">ทะเบียนเดิม (เกมสุ่ม)</th>
                   <th style="width: 150px;">ที่มา / หมายเหตุ</th>
                   <th style="width: 100px; text-align: center;">จัดการ</th>
@@ -186,7 +186,7 @@
               <thead>
                 <tr>
                   <th style="width: 60px; text-align: center;">ลำดับ</th>
-                  <th>รายชื่อสมาชิก</th>
+                  <th>รายชื่อเจ้าหน้าที่ตำรวจ</th>
                   <th style="width: 110px; text-align: center;">จำนวนรถ</th>
                   <th>รายการรถและป้ายทะเบียนที่ครอบครอง</th>
                   <th style="width: 150px;">ที่มา</th>
@@ -211,7 +211,7 @@
     <!-- Footer -->
     <footer class="main-footer">
       <div class="footer-content">
-        <p>🚗 KKPD Master Garage Registry • ฐานข้อมูลทะเบียนรถแก๊ง KKPD</p>
+        <p>🚓 KKPD Master Garage Registry • ฐานข้อมูลทะเบียนรถเจ้าหน้าที่ตำรวจ KK TOWN</p>
         <div class="footer-links">
           <button id="btnSoundToggle" class="btn-icon" title="เปิด/ปิดเสียงเอฟเฟกต์">
             <i class="fa-solid fa-volume-high" id="soundIcon"></i>
@@ -238,9 +238,9 @@
           <!-- Field 1: Member Name -->
           <div class="form-group">
             <label for="newVehicleOwner" class="form-label">
-              <i class="fa-solid fa-user"></i> 1. ชื่อผู้ครอบครอง / สมาชิก <span class="required">*</span>
+              <i class="fa-solid fa-user-shield"></i> 1. ชื่อเจ้าหน้าที่ตำรวจผู้ครอบครอง <span class="required">*</span>
             </label>
-            <input type="text" id="newVehicleOwner" class="styled-input" placeholder="พิมพ์ชื่อผู้เล่น เช่น Txrbo, Baron, Ainz..." autocomplete="off" list="membersDataList">
+            <input type="text" id="newVehicleOwner" class="styled-input" placeholder="พิมพ์ชื่อเจ้าหน้าที่ เช่น Txrbo, Baron, Ainz..." autocomplete="off" list="membersDataList">
             <datalist id="membersDataList">
               <!-- Dynamically populated with existing member names -->
             </datalist>
@@ -356,9 +356,9 @@
           <!-- Field 1: Member Name -->
           <div class="form-group">
             <label for="editVehicleOwner" class="form-label">
-              <i class="fa-solid fa-user"></i> 1. ชื่อผู้ครอบครอง / สมาชิก <span class="required">*</span>
+              <i class="fa-solid fa-user-shield"></i> 1. ชื่อเจ้าหน้าที่ตำรวจผู้ครอบครอง <span class="required">*</span>
             </label>
-            <input type="text" id="editVehicleOwner" class="styled-input" placeholder="ชื่อผู้เล่น..." autocomplete="off">
+            <input type="text" id="editVehicleOwner" class="styled-input" placeholder="ชื่อเจ้าหน้าที่ตำรวจ..." autocomplete="off">
           </div>
 
           <!-- Field 2: Car Model -->

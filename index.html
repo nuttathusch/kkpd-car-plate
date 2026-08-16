@@ -441,9 +441,9 @@
       <section id="tab-masterdata" class="tab-content">
         <div class="section-hero">
           <div class="hero-text">
-            <h2><i class="fa-solid fa-database"></i> ฐานข้อมูลการครอบครองรถทั้งหมด (Master Vehicle Database)</h2>
+            <h2><i class="fa-solid fa-shield-halved"></i> ฐานข้อมูลทะเบียนรถเจ้าหน้าที่ตำรวจ KK TOWN</h2>
             <p>
-              รวบรวมข้อมูลการถือครองรถทั้งหมด <strong>427 คัน</strong> จาก <strong>306 สมาชิก</strong> (รวม Sugoi, Visione, Thrax, Kuruma, Turismo, I8, Mustang ฯลฯ และผลลัพธ์จากกิจกรรม KKPD Event 8 ล่าสุด)
+              รวบรวมข้อมูลการถือครองรถทั้งหมด <strong>427 คัน</strong> จาก <strong>306 นาย</strong> (เจ้าหน้าที่ตำรวจ KK TOWN ครบทุกรุ่น และผลลัพธ์จากกิจกรรมล่าสุด)
             </p>
           </div>
           <div class="hero-controls">
@@ -466,10 +466,10 @@
             </div>
           </div>
           <div class="master-stat-card">
-            <div class="master-stat-icon" style="color:var(--accent-purple); background:rgba(168,85,247,0.12)"><i class="fa-solid fa-users"></i></div>
+            <div class="master-stat-icon" style="color:var(--accent-purple); background:rgba(168,85,247,0.12)"><i class="fa-solid fa-user-shield"></i></div>
             <div class="master-stat-info">
-              <span class="master-stat-label">จำนวนผู้ครอบครอง</span>
-              <div class="master-stat-val" id="statTotalMembers">306 <small>คน</small></div>
+              <span class="master-stat-label">จำนวนเจ้าหน้าที่ตำรวจ</span>
+              <div class="master-stat-val" id="statTotalMembers">306 <small>นาย</small></div>
             </div>
           </div>
           <div class="master-stat-card">
@@ -482,8 +482,8 @@
           <div class="master-stat-card">
             <div class="master-stat-icon" style="color:var(--accent-emerald); background:rgba(16,185,129,0.12)"><i class="fa-solid fa-layer-group"></i></div>
             <div class="master-stat-info">
-              <span class="master-stat-label">สมาชิกที่ถือครอง 2+ คัน</span>
-              <div class="master-stat-val" id="statMultiCarMembers">68 <small>คน</small></div>
+              <span class="master-stat-label">เจ้าหน้าที่ถือครอง 2+ คัน</span>
+              <div class="master-stat-val" id="statMultiCarMembers">68 <small>นาย</small></div>
             </div>
           </div>
         </div>
@@ -498,15 +498,15 @@
           <div class="master-search-row">
             <div class="search-input-wrapper">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" id="masterSearchInput" class="styled-input search-input" placeholder="🔍 ค้นหาชื่อสมาชิก, เลขทะเบียน (เช่น KKPD 407, 00, 111), ทะเบียนเดิม, หรือรุ่นรถ...">
+              <input type="text" id="masterSearchInput" class="styled-input search-input" placeholder="🔍 ค้นหาชื่อเจ้าหน้าที่ตำรวจ, เลขทะเบียน (เช่น KKPD 407, 00, 111), ทะเบียนเดิม, หรือรุ่นรถ...">
               <button id="btnClearSearch" class="btn-clear-search hidden"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="master-view-toggle">
               <button id="btnViewVehicles" class="btn-toggle active" title="มุมมองทะเบียนรถทั้งหมด 427 คัน">
                 <i class="fa-solid fa-list-ol"></i> ทะเบียนรถทั้งหมด (<span id="countViewVehicles">427</span>)
               </button>
-              <button id="btnViewMembers" class="btn-toggle" title="มุมมองสรุปรายชื่อสมาชิก">
-                <i class="fa-solid fa-users"></i> แยกตามสมาชิก (<span id="countViewMembers">306</span>)
+              <button id="btnViewMembers" class="btn-toggle" title="มุมมองสรุปรายชื่อเจ้าหน้าที่ตำรวจ">
+                <i class="fa-solid fa-user-shield"></i> แยกตามรายชื่อเจ้าหน้าที่ (<span id="countViewMembers">306</span>)
               </button>
               <button id="btnViewModel" class="btn-toggle" title="มุมมองแยกตามรุ่นรถ">
                 <i class="fa-solid fa-grip"></i> แยกตามรุ่นรถ (<span id="countViewModel">14</span>)
@@ -528,8 +528,8 @@
                   <th style="width: 70px; text-align: center;">ลำดับ</th>
                   <th style="width: 140px; text-align: center;">ป้ายทะเบียน</th>
                   <th style="width: 160px;">รุ่นรถ</th>
-                  <th>ชื่อผู้ครอบครอง</th>
-                  <th style="width: 130px; text-align: center;">ทะเบียนเดิม</th>
+                  <th>ชื่อเจ้าหน้าที่ตำรวจ</th>
+                  <th style="width: 130px; text-align: center;">ทะเบียนเดิม (เกมสุ่ม)</th>
                   <th style="width: 160px;">ที่มา / หมายเหตุ</th>
                 </tr>
               </thead>
@@ -547,7 +547,7 @@
               <thead>
                 <tr>
                   <th style="width: 70px; text-align: center;">ลำดับ</th>
-                  <th>รายชื่อสมาชิก</th>
+                  <th>รายชื่อเจ้าหน้าที่ตำรวจ</th>
                   <th style="width: 110px; text-align: center;">จำนวนรถ</th>
                   <th>รายการรถและป้ายทะเบียนที่ครอบครอง</th>
                   <th style="width: 160px;">ที่มา</th>
