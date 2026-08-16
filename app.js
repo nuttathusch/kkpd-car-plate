@@ -748,7 +748,7 @@ function renderFullState() {
 
 function updateAnnouncementText(results) {
   const submittedTotal = Object.keys(state.preferences).length;
-  let text = `📢 **สรุปผลการจัดสรรของรางวัล (รถ 20 คัน)** 🏎️✨\n`;
+  let text = `📢 **สรุปผลการจัดสรรของรางวัล KKPD SPECIAL EVENT ครั้งที่ 8 (รถ 20 คัน)** 🏎️✨\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
   text += `👥 ผู้เข้าร่วมส่งข้อมูลแล้ว: ${submittedTotal}/20 คน\n\n`;
 
