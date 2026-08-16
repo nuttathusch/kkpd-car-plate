@@ -885,7 +885,7 @@ function renderFullState() {
       
       let baseOrigin = window.location.origin + window.location.pathname;
       if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        baseOrigin = 'https://txrbochannel.github.io/kkpd-prize-selection/';
+        baseOrigin = 'https://nuttathusch.github.io/kkpd-prize-selection/';
       }
       const url = new URL(baseOrigin);
       url.searchParams.set("player", pId);
