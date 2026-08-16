@@ -1047,7 +1047,7 @@ function handlePinVerification() {
   } else {
     AudioEngine.play('error');
     DOM.pinErrorMessage.classList.remove("hidden");
-    DOM.pinErrorMessage.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง`;
+    DOM.pinErrorMessage.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> รหัส PIN ไม่ถูกต้อง`;
     DOM.playerPinInput.classList.add("shake-input");
     setTimeout(() => DOM.playerPinInput.classList.remove("shake-input"), 400);
   }
