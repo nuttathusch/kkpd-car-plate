@@ -122,15 +122,17 @@ const CARS = {
 const DEFAULT_CAR_KEYS = Object.keys(CARS); // ["banshee", "corsita", "r32", "t20", "c8", "furia"]
 
 // ==========================================
-// 2. STATE MANAGEMENT & STORAGE
+// 2. STATE MANAGEMENT, STORAGE & CLOUD SYNC
 // ==========================================
 
-const STORAGE_KEY = "kkpd_prize_selection_v2";
+const STORAGE_KEY = "kkpd_prize_selection_v3";
+const CLOUD_SYNC_URL = "https://kvdb.io/NoTM4bJXjrCUgQWLBcgR3F/kkpd_event_state";
 
 let state = {
   preferences: {}, // { [playerId]: ["banshee", "r32", ...] }
   submissions: {}, // { [playerId]: timestamp }
   pins: { ...DEFAULT_PINS }, // { [playerId]: "1001" }
+  lastUpdated: 0,
   authenticatedPlayerId: null,
   isAdminAuthenticated: false,
   soundEnabled: true,
@@ -148,6 +150,7 @@ function loadState() {
       state.preferences = parsed.preferences || {};
       state.submissions = parsed.submissions || {};
       state.pins = { ...DEFAULT_PINS, ...(parsed.pins || {}) };
+      state.lastUpdated = parsed.lastUpdated || 0;
       if (typeof parsed.soundEnabled === "boolean") state.soundEnabled = parsed.soundEnabled;
     }
   } catch (e) {
@@ -161,12 +164,104 @@ function saveState() {
       preferences: state.preferences,
       submissions: state.submissions,
       pins: state.pins,
+      lastUpdated: state.lastUpdated,
       soundEnabled: state.soundEnabled
     }));
   } catch (e) {
     console.error("Failed to save state to localStorage:", e);
   }
 }
+
+const CloudSync = {
+  isSyncing: false,
+  async fetchLatest(silent = false) {
+    if (this.isSyncing) return;
+    this.isSyncing = true;
+    if (!silent) this.updateIndicator('syncing');
+
+    try {
+      const res = await fetch(CLOUD_SYNC_URL + '?_t=' + Date.now(), {
+        cache: 'no-store'
+      });
+      if (res.ok) {
+        const cloudData = await res.json();
+        if (cloudData && typeof cloudData === 'object') {
+          const cloudTime = cloudData.lastUpdated || 0;
+          if (cloudTime > (state.lastUpdated || 0) || Object.keys(state.preferences).length === 0) {
+            state.preferences = { ...(cloudData.preferences || {}) };
+            state.submissions = { ...(cloudData.submissions || {}) };
+            if (cloudData.pins) state.pins = { ...DEFAULT_PINS, ...cloudData.pins };
+            state.lastUpdated = cloudTime;
+            saveState();
+            renderFullState();
+            initUI();
+            if (!silent) showToast("🔄 ซิงค์ข้อมูลล่าสุดจาก Cloud เรียบร้อยแล้ว", "success");
+          }
+          this.updateIndicator('online');
+        }
+      } else {
+        this.updateIndicator('online');
+      }
+    } catch (err) {
+      console.warn("Cloud Sync fetch issue:", err);
+      this.updateIndicator('offline');
+    } finally {
+      this.isSyncing = false;
+    }
+  },
+
+  async pushUpdate() {
+    this.updateIndicator('syncing');
+    state.lastUpdated = Date.now();
+    saveState();
+
+    const payload = {
+      version: 2,
+      lastUpdated: state.lastUpdated,
+      preferences: state.preferences,
+      submissions: state.submissions,
+      pins: state.pins
+    };
+
+    try {
+      const res = await fetch(CLOUD_SYNC_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        this.updateIndicator('online');
+      } else {
+        console.warn("Cloud push response not ok:", res.status);
+      }
+    } catch (err) {
+      console.error("Cloud push failed:", err);
+      this.updateIndicator('offline');
+    }
+  },
+
+  updateIndicator(status) {
+    if (!DOM.cloudStatusText || !DOM.cloudIcon) return;
+    const statIcon = document.querySelector(".stat-icon.cloud-stat");
+
+    if (status === 'syncing') {
+      DOM.cloudStatusText.textContent = "กำลังซิงค์...";
+      DOM.cloudStatusText.className = "stat-value cloud-status-text syncing";
+      if (statIcon) statIcon.className = "stat-icon cloud-stat syncing";
+      DOM.cloudIcon.className = "fa-solid fa-arrows-rotate fa-spin";
+    } else if (status === 'online') {
+      DOM.cloudStatusText.textContent = "ออนไลน์ ✓";
+      DOM.cloudStatusText.className = "stat-value cloud-status-text";
+      if (statIcon) statIcon.className = "stat-icon cloud-stat";
+      DOM.cloudIcon.className = "fa-solid fa-cloud-arrow-up";
+    } else if (status === 'offline') {
+      DOM.cloudStatusText.textContent = "ออฟไลน์";
+      DOM.cloudStatusText.className = "stat-value cloud-status-text offline";
+      if (statIcon) statIcon.className = "stat-icon cloud-stat offline";
+      DOM.cloudIcon.className = "fa-solid fa-cloud-slash";
+    }
+  }
+};
 
 // ==========================================
 // 3. WEB AUDIO SYNTHESIZER
@@ -335,6 +430,9 @@ const DOM = {
   tabBtns: document.querySelectorAll(".tab-btn"),
   tabContents: document.querySelectorAll(".tab-content"),
   submittedCount: document.getElementById("submittedCount"),
+  cloudStatusText: document.getElementById("cloudStatusText"),
+  cloudIcon: document.getElementById("cloudIcon"),
+  btnManualCloudSync: document.getElementById("btnManualCloudSync"),
   playerSelect: document.getElementById("playerSelect"),
   rosterChipsGrid: document.getElementById("rosterChipsGrid"),
   legendDoneCount: document.getElementById("legendDoneCount"),
@@ -995,7 +1093,7 @@ DOM.adminPasswordInput.addEventListener("keyup", (e) => {
 // Admin Logout
 DOM.btnLogoutAdmin.addEventListener("click", () => {
   state.isAdminAuthenticated = false;
-  DOM.adminLockScreen.classList.remove("hidden");
+  DOM.adminLockScreen.classList.add("hidden");
   DOM.adminDashboardContent.classList.add("hidden");
   AudioEngine.play('click');
   showToast("ออกจากระบบผู้ดูแล (Admin) เรียบร้อยแล้ว", "info");
@@ -1024,6 +1122,7 @@ DOM.btnSubmitPreference.addEventListener("click", () => {
   state.preferences[p.id] = [...state.currentFormOrder];
   state.submissions[p.id] = new Date().toISOString();
   saveState();
+  CloudSync.pushUpdate();
 
   renderFullState();
   initUI(); // refresh select checkmarks
@@ -1076,6 +1175,7 @@ DOM.btnRegeneratePins.addEventListener("click", () => {
     });
 
     saveState();
+    CloudSync.pushUpdate();
     renderFullState();
     AudioEngine.play('success');
     showToast("สุ่มรหัส PIN 4 หลักใหม่ครบ 20 คนเรียบร้อยแล้ว!", "success");
@@ -1087,7 +1187,7 @@ DOM.btnCopyAllPins.addEventListener("click", () => {
   let pinListText = `🔑 **รายชื่อผู้เข้าร่วม 20 คน พร้อมรหัส PIN 4 หลัก** 🏎️\n`;
   pinListText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
   PARTICIPANTS.forEach(p => {
-    const pin = state.pins[p.id];
+    const pin = state.pins[p.id] || (1000 + p.rank).toString();
     pinListText += `อันดับ ${p.rank.toString().padStart(2, ' ')}. ${p.name} ➡️ รหัส PIN: **${pin}**\n`;
   });
   pinListText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
@@ -1095,7 +1195,7 @@ DOM.btnCopyAllPins.addEventListener("click", () => {
 
   navigator.clipboard.writeText(pinListText).then(() => {
     AudioEngine.play('success');
-    showToast("คัดลอกรายชื่อและรหัส PIN ทั้งหมดเรียบร้อยแล้ว!", "success");
+    showToast("คัดลอกรายชื่อและ PIN ทั้ง 20 คนแล้ว!", "success");
   });
 });
 
@@ -1117,7 +1217,7 @@ function copyAnnouncement() {
 
 // Generate Demo Data
 DOM.btnGenerateDemo.addEventListener("click", () => {
-  if (confirm("ต้องการสุ่มข้อมูลความต้องการของผู้เล่นทั้ง 20 คน เพื่อทดสอบระบบหรือไม่?")) {
+  if (confirm("สร้างข้อมูลจำลองการส่งความต้องการของผู้เข้าร่วมทั้ง 20 คนใช่หรือไม่?")) {
     AudioEngine.play('success');
     
     PARTICIPANTS.forEach(p => {
@@ -1127,6 +1227,7 @@ DOM.btnGenerateDemo.addEventListener("click", () => {
     });
 
     saveState();
+    CloudSync.pushUpdate();
     renderFullState();
     initUI();
     showToast("สุ่มข้อมูลตัวอย่างครบ 20 คนสำเร็จแล้ว!", "success");
@@ -1139,11 +1240,20 @@ DOM.btnResetAll.addEventListener("click", () => {
     state.preferences = {};
     state.submissions = {};
     saveState();
+    CloudSync.pushUpdate();
     renderFullState();
     initUI();
     showToast("ล้างข้อมูลทั้งหมดเรียบร้อยแล้ว", "info");
   }
 });
+
+// Manual Cloud Sync Button
+if (DOM.btnManualCloudSync) {
+  DOM.btnManualCloudSync.addEventListener("click", () => {
+    AudioEngine.play('click');
+    CloudSync.fetchLatest(false);
+  });
+}
 
 // Export JSON
 DOM.btnExportJSON.addEventListener("click", () => {
@@ -1222,6 +1332,7 @@ DOM.btnSaveAdminEdit.addEventListener("click", () => {
   state.preferences[state.adminEditingPlayerId] = [...state.adminFormOrder];
   state.submissions[state.adminEditingPlayerId] = new Date().toISOString();
   saveState();
+  CloudSync.pushUpdate();
 
   DOM.adminEditModal.classList.add("hidden");
   renderFullState();
@@ -1262,6 +1373,24 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
+
+  // Initial fetch from central Cloud Database
+  CloudSync.fetchLatest(true);
+
+  // Auto-sync polling every 3 seconds for real-time updates across all players
+  setInterval(() => {
+    CloudSync.fetchLatest(true);
+  }, 3000);
+
+  window.addEventListener("focus", () => {
+    CloudSync.fetchLatest(true);
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      CloudSync.fetchLatest(true);
+    }
+  });
 
   // Check Admin URL parameter (e.g. ?admin=9936)
   const paramAdmin = urlParams.get("admin");

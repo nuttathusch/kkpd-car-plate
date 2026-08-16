@@ -38,6 +38,14 @@
       </div>
 
       <div class="header-stats">
+        <div class="stat-card cloud-sync-card" id="cloudSyncStatusCard" title="สถานะการซิงค์ข้อมูลกับผู้เล่นคนอื่นทั่วโลก">
+          <div class="stat-icon cloud-stat"><i class="fa-solid fa-cloud-arrow-up" id="cloudIcon"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">ระบบ Cloud Real-time</span>
+            <div class="stat-value cloud-status-text" id="cloudStatusText">ออนไลน์ ✓</div>
+          </div>
+        </div>
+
         <div class="stat-card">
           <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
           <div class="stat-info">
@@ -345,6 +353,9 @@
           <!-- Admin Quick Actions -->
           <div class="admin-actions-bar">
             <div class="action-group">
+              <button id="btnManualCloudSync" class="btn-secondary" title="ดึงข้อมูลล่าสุดจาก Cloud ทันที">
+                <i class="fa-solid fa-arrows-rotate"></i> ซิงค์ Cloud ตอนนี้
+              </button>
               <button id="btnGenerateDemo" class="btn-primary">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> สุ่มข้อมูลตัวอย่างครบ 20 คน (Demo)
               </button>

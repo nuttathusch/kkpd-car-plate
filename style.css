@@ -201,6 +201,35 @@ body {
   color: var(--accent-amber);
 }
 
+.stat-icon.cloud-stat {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--accent-emerald);
+}
+
+.stat-icon.cloud-stat.syncing {
+  background: rgba(0, 240, 255, 0.12);
+  color: var(--accent-cyan);
+}
+
+.stat-icon.cloud-stat.offline {
+  background: rgba(244, 63, 94, 0.12);
+  color: var(--accent-rose);
+}
+
+.cloud-status-text {
+  font-size: 0.92rem !important;
+  color: var(--accent-emerald) !important;
+  font-weight: 600 !important;
+}
+
+.cloud-status-text.syncing {
+  color: var(--accent-cyan) !important;
+}
+
+.cloud-status-text.offline {
+  color: var(--accent-rose) !important;
+}
+
 .stat-label {
   font-size: 0.75rem;
   color: var(--text-muted);
