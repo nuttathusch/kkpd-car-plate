@@ -132,6 +132,7 @@ let state = {
   submissions: {}, // { [playerId]: timestamp }
   pins: { ...DEFAULT_PINS }, // { [playerId]: "1001" }
   authenticatedPlayerId: null,
+  isAdminAuthenticated: false,
   soundEnabled: true,
   selectedPlayerId: null,
   currentFormOrder: [...DEFAULT_CAR_KEYS],
@@ -359,6 +360,12 @@ const DOM = {
   carRosterList: document.getElementById("carRosterList"),
   btnSimulateAnim: document.getElementById("btnSimulateAnim"),
   btnQuickCopyDiscord: document.getElementById("btnQuickCopyDiscord"),
+  adminLockScreen: document.getElementById("adminLockScreen"),
+  adminDashboardContent: document.getElementById("adminDashboardContent"),
+  adminPasswordInput: document.getElementById("adminPasswordInput"),
+  btnUnlockAdmin: document.getElementById("btnUnlockAdmin"),
+  adminPasswordError: document.getElementById("adminPasswordError"),
+  btnLogoutAdmin: document.getElementById("btnLogoutAdmin"),
   adminTableBody: document.getElementById("adminTableBody"),
   btnRegeneratePins: document.getElementById("btnRegeneratePins"),
   btnCopyAllPins: document.getElementById("btnCopyAllPins"),
@@ -899,7 +906,54 @@ DOM.tabBtns.forEach(btn => {
 
     btn.classList.add("active");
     document.getElementById(targetTab).classList.add("active");
+
+    // Check Admin Tab Protection
+    if (targetTab === "tab-admin") {
+      if (state.isAdminAuthenticated) {
+        DOM.adminLockScreen.classList.add("hidden");
+        DOM.adminDashboardContent.classList.remove("hidden");
+      } else {
+        DOM.adminLockScreen.classList.remove("hidden");
+        DOM.adminDashboardContent.classList.add("hidden");
+        DOM.adminPasswordError.classList.add("hidden");
+        DOM.adminPasswordInput.value = "";
+        DOM.adminPasswordInput.focus();
+      }
+    }
   });
+});
+
+// Admin Authentication Handlers
+function handleAdminLogin() {
+  const enteredPass = DOM.adminPasswordInput.value.trim();
+  if (enteredPass === MASTER_ADMIN_PIN) {
+    state.isAdminAuthenticated = true;
+    DOM.adminLockScreen.classList.add("hidden");
+    DOM.adminDashboardContent.classList.remove("hidden");
+    DOM.adminPasswordError.classList.add("hidden");
+    DOM.adminPasswordInput.value = "";
+    AudioEngine.play('success');
+    showToast("🔓 เข้าสู่ระบบผู้ดูแล (Admin) สำเร็จแล้ว!", "success");
+  } else {
+    AudioEngine.play('error');
+    DOM.adminPasswordError.classList.remove("hidden");
+    DOM.adminPasswordInput.classList.add("shake-input");
+    setTimeout(() => DOM.adminPasswordInput.classList.remove("shake-input"), 400);
+  }
+}
+
+DOM.btnUnlockAdmin.addEventListener("click", () => handleAdminLogin());
+DOM.adminPasswordInput.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") handleAdminLogin();
+});
+
+// Admin Logout
+DOM.btnLogoutAdmin.addEventListener("click", () => {
+  state.isAdminAuthenticated = false;
+  DOM.adminLockScreen.classList.remove("hidden");
+  DOM.adminDashboardContent.classList.add("hidden");
+  AudioEngine.play('click');
+  showToast("ออกจากระบบผู้ดูแล (Admin) เรียบร้อยแล้ว", "info");
 });
 
 // Reset My Choices
@@ -1162,5 +1216,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
+  }
+
+  // Check Admin URL parameter (e.g. ?admin=9999)
+  const paramAdmin = urlParams.get("admin");
+  if (paramAdmin && paramAdmin === MASTER_ADMIN_PIN) {
+    state.isAdminAuthenticated = true;
+    showToast("🔑 ปลดล็อกสิทธิ์ Admin อัตโนมัติแล้ว", "info");
   }
 });

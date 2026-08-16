@@ -427,6 +427,62 @@ body {
   transition: var(--trans-fast);
 }
 
+/* ==========================================================================
+   Admin Lock Screen Gate
+   ========================================================================== */
+
+.admin-lock-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  min-height: 450px;
+}
+
+.lock-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.3s ease;
+}
+
+.lock-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: var(--radius-full);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--accent-amber);
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.lock-card h3 {
+  font-size: 1.35rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.lock-card p {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.admin-dashboard-content.hidden,
+.admin-lock-screen.hidden {
+  display: none;
+}
+
 .styled-select:focus {
   outline: none;
   border-color: var(--border-focus);

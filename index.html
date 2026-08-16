@@ -282,83 +282,117 @@
 
       <!-- ================= TAB 3: ADMIN & SETTINGS ================= -->
       <section id="tab-admin" class="tab-content">
-        <div class="section-hero">
-          <div class="hero-text">
-            <h2><i class="fa-solid fa-sliders"></i> แผงควบคุมและจัดการข้อมูล (Admin Dashboard)</h2>
-            <p>
-              กรอกข้อมูลแทนผู้เล่น, สุ่มข้อมูลตัวอย่างทดสอบระบบ, และคัดลอกข้อความสรุปสำหรับประกาศ
-            </p>
-          </div>
-        </div>
-
-        <!-- Admin Quick Actions -->
-        <div class="admin-actions-bar">
-          <div class="action-group">
-            <button id="btnGenerateDemo" class="btn-primary">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> สุ่มข้อมูลตัวอย่างครบ 20 คน (Demo)
-            </button>
-            <button id="btnCopyAnnouncement" class="btn-accent">
-              <i class="fa-solid fa-copy"></i> คัดลอกข้อความสรุปผล (Discord / FiveM)
-            </button>
-            <button id="btnExportJSON" class="btn-secondary">
-              <i class="fa-solid fa-file-export"></i> ส่งออกข้อมูล (JSON)
-            </button>
-          </div>
-          <div class="action-group">
-            <button id="btnResetAll" class="btn-danger">
-              <i class="fa-solid fa-trash-can"></i> ล้างข้อมูลทั้งหมด (Reset)
-            </button>
-          </div>
-        </div>
-
-        <!-- Participants Management Table -->
-        <div class="admin-table-container">
-          <div class="table-header">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-              <div>
-                <h3><i class="fa-solid fa-users-gear"></i> สถานะและรหัส PIN ผู้เข้าร่วมทั้ง 20 คน</h3>
-                <span class="table-subtitle">รหัส PIN สุ่มแบบไม่ซ้ำกัน ปลอดภัยจากการคาดเดา</span>
+        <!-- Admin Gate / Lock Screen (Shown when not authenticated) -->
+        <div id="adminLockScreen" class="admin-lock-screen">
+          <div class="lock-card">
+            <div class="lock-icon">
+              <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h3>เข้าสู่ระบบผู้ดูแลระบบ (Admin Access)</h3>
+            <p>กรุณากรอกรหัสผ่าน Admin เพื่อดูข้อมูล PIN รายบุคคล, จัดการสมาชิก, และส่งออกข้อมูล</p>
+            
+            <div class="admin-auth-form">
+              <div class="pin-input-wrapper" style="max-width: 240px; margin: 0 auto 16px;">
+                <i class="fa-solid fa-key pin-icon"></i>
+                <input type="password" id="adminPasswordInput" class="styled-input pin-input" maxlength="8" placeholder="••••" autocomplete="off">
               </div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <button id="btnRegeneratePins" class="btn-sm btn-secondary" title="สุ่มรหัส PIN 4 หลักใหม่ทั้งหมด">
-                  <i class="fa-solid fa-shuffle"></i> สุ่ม PIN ใหม่ทั้งหมด
+              <div class="admin-lock-actions">
+                <button id="btnUnlockAdmin" class="btn-primary btn-large">
+                  <i class="fa-solid fa-lock-open"></i> ยืนยันรหัสผ่าน
                 </button>
-                <button id="btnCopyAllPins" class="btn-sm btn-accent">
-                  <i class="fa-solid fa-clipboard-list"></i> คัดลอกรายชื่อ + รหัส PIN ทั้งหมด
-                </button>
+              </div>
+              <div id="adminPasswordError" class="pin-error-msg hidden" style="justify-content: center; margin-top: 12px;">
+                <i class="fa-solid fa-triangle-exclamation"></i> รหัสผ่าน Admin ไม่ถูกต้อง
               </div>
             </div>
           </div>
-
-          <div class="table-responsive">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width: 70px;">อันดับ</th>
-                  <th>ชื่อผู้เข้าร่วม</th>
-                  <th style="width: 110px;">รหัส PIN 4 ตัว</th>
-                  <th style="width: 120px;">สถานะการส่ง</th>
-                  <th>ลำดับความชอบ (1st ➡️ 6th)</th>
-                  <th style="width: 150px;">รถที่ได้รับการจัดสรร</th>
-                  <th style="width: 120px; text-align: center;">จัดการ</th>
-                </tr>
-              </thead>
-              <tbody id="adminTableBody">
-                <!-- Dynamically populated 20 rows -->
-              </tbody>
-            </table>
-          </div>
         </div>
 
-        <!-- Announcement Preview Box -->
-        <div class="announcement-preview-box">
-          <div class="preview-header">
-            <h4><i class="fa-solid fa-bullhorn"></i> ตัวอย่างข้อความประกาศ (Announcement Format)</h4>
-            <button id="btnCopyPreviewText" class="btn-sm btn-accent">
-              <i class="fa-solid fa-copy"></i> คัดลอก
-            </button>
+        <!-- Admin Dashboard Content (Hidden until authenticated) -->
+        <div id="adminDashboardContent" class="admin-dashboard-content hidden">
+          <div class="section-hero">
+            <div class="hero-text">
+              <h2><i class="fa-solid fa-sliders"></i> แผงควบคุมและจัดการข้อมูล (Admin Dashboard)</h2>
+              <p>
+                กรอกข้อมูลแทนผู้เล่น, สุ่มข้อมูลตัวอย่างทดสอบระบบ, และคัดลอกข้อความสรุปสำหรับประกาศ
+              </p>
+            </div>
+            <div class="hero-controls">
+              <button id="btnLogoutAdmin" class="btn-sm btn-danger">
+                <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ Admin
+              </button>
+            </div>
           </div>
-          <pre id="announcementText" class="code-preview">กดปุ่มสุ่มข้อมูล หรือรอให้สมาชิกส่งข้อมูลครบเพื่อดูตัวอย่างข้อความประกาศ...</pre>
+
+          <!-- Admin Quick Actions -->
+          <div class="admin-actions-bar">
+            <div class="action-group">
+              <button id="btnGenerateDemo" class="btn-primary">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> สุ่มข้อมูลตัวอย่างครบ 20 คน (Demo)
+              </button>
+              <button id="btnCopyAnnouncement" class="btn-accent">
+                <i class="fa-solid fa-copy"></i> คัดลอกข้อความสรุปผล (Discord / FiveM)
+              </button>
+              <button id="btnExportJSON" class="btn-secondary">
+                <i class="fa-solid fa-file-export"></i> ส่งออกข้อมูล (JSON)
+              </button>
+            </div>
+            <div class="action-group">
+              <button id="btnResetAll" class="btn-danger">
+                <i class="fa-solid fa-trash-can"></i> ล้างข้อมูลทั้งหมด (Reset)
+              </button>
+            </div>
+          </div>
+
+          <!-- Participants Management Table -->
+          <div class="admin-table-container">
+            <div class="table-header">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <div>
+                  <h3><i class="fa-solid fa-users-gear"></i> สถานะและรหัส PIN ผู้เข้าร่วมทั้ง 20 คน</h3>
+                  <span class="table-subtitle">รหัส PIN สุ่มแบบไม่ซ้ำกัน ปลอดภัยจากการคาดเดา</span>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button id="btnRegeneratePins" class="btn-sm btn-secondary" title="สุ่มรหัส PIN 4 หลักใหม่ทั้งหมด">
+                    <i class="fa-solid fa-shuffle"></i> สุ่ม PIN ใหม่ทั้งหมด
+                  </button>
+                  <button id="btnCopyAllPins" class="btn-sm btn-accent">
+                    <i class="fa-solid fa-clipboard-list"></i> คัดลอกรายชื่อ + รหัส PIN ทั้งหมด
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 70px;">อันดับ</th>
+                    <th>ชื่อผู้เข้าร่วม</th>
+                    <th style="width: 110px;">รหัส PIN 4 ตัว</th>
+                    <th style="width: 120px;">สถานะการส่ง</th>
+                    <th>ลำดับความชอบ (1st ➡️ 6th)</th>
+                    <th style="width: 150px;">รถที่ได้รับการจัดสรร</th>
+                    <th style="width: 120px; text-align: center;">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                  <!-- Dynamically populated 20 rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Announcement Preview Box -->
+          <div class="announcement-preview-box">
+            <div class="preview-header">
+              <h4><i class="fa-solid fa-bullhorn"></i> ตัวอย่างข้อความประกาศ (Announcement Format)</h4>
+              <button id="btnCopyPreviewText" class="btn-sm btn-accent">
+                <i class="fa-solid fa-copy"></i> คัดลอก
+              </button>
+            </div>
+            <pre id="announcementText" class="code-preview">กดปุ่มสุ่มข้อมูล หรือรอให้สมาชิกส่งข้อมูลครบเพื่อดูตัวอย่างข้อความประกาศ...</pre>
+          </div>
         </div>
       </section>
 
