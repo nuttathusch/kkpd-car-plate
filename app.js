@@ -1437,57 +1437,57 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 
 const MASTER_DATA = [
-  { rank: 1, name: "Ainz D. Camillos", cars: ["corsita", "c8"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 2, name: "JaJa Osi", cars: ["corsita", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 3, name: "John Ratchada", cars: ["corsita", "r32"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 4, name: "Mateo", cars: ["t20", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 5, name: "Mini chabuu", cars: ["corsita", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 6, name: "Suwit.S", cars: ["corsita", "r32"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 7, name: "Tatto Horsepower", cars: ["c8", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 8, name: "WHY WANG JEXNG", cars: ["corsita", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 9, name: "Snim", cars: ["r32"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 10, name: "Brave", cars: ["r32"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 11, name: "Tawanchai", cars: ["r32", "t20"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 12, name: "Jack", cars: ["t20", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 13, name: "DEW", cars: ["r32", "t20"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 14, name: "Ukalyp Tus", cars: ["corsita", "c8"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 15, name: "Hmee naja", cars: ["corsita", "c8"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 16, name: "Baron", cars: ["t20", "c8"], source: "existing", note: "ข้อมูลเดิม (T20 + C8)" },
-  { rank: 17, name: "Thoy", cars: ["t20"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 18, name: "Lpa", cars: ["r32", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 19, name: "ROOT", cars: ["t20"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 20, name: "JINJUN", cars: ["r32"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 21, name: "MOJI", cars: ["c8", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 22, name: "Black", cars: ["t20"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 23, name: "Bel", cars: ["c8", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 24, name: "Winter", cars: ["c8"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 25, name: "Brown Nie", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 26, name: "Mellow", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 27, name: "NamNungs", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 28, name: "WHITE Waikonloei", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 29, name: "Milo / [KKPD] Milo Emilian Marquez", cars: ["banshee", "corsita"], source: "both", note: "เดิม Banshee + ได้ Corsita" },
-  { rank: 30, name: "Chucky", cars: ["furia"], source: "existing", note: "ข้อมูลเดิม" },
-  { rank: 31, name: "Leo", cars: ["furia"], source: "existing", note: "ข้อมูลเดิม" },
-  // Event 8 Winners (20 cars)
-  { rank: 32, name: "[kkpd]sakkarin dowlie", cars: ["c8"], source: "event8", note: "🌟 Event 8 (อันดับ 1)" },
-  { rank: 33, name: "[KKPD] Kimmy Siriphapa", cars: ["c8"], source: "event8", note: "🌟 Event 8 (อันดับ 2)" },
-  { rank: 34, name: "[KKPD] KHUNKHAI Eisenwall", cars: ["c8"], source: "event8", note: "🌟 Event 8 (อันดับ 3)" },
-  { rank: 35, name: "[KKPD] Seua Osi", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 4)" },
-  { rank: 36, name: "[KKPD] Kair Osi", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 5)" },
-  { rank: 37, name: "[KKPD] Chalam Noi", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 6)" },
-  { rank: 38, name: "[KKPD] Kkr Kaliona", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 7)" },
-  { rank: 39, name: "[KKPD] Tarik Monique", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 8)" },
-  { rank: 40, name: "[KKPD] ASGARD DEEJINGJING", cars: ["t20"], source: "event8", note: "🌟 Event 8 (อันดับ 9)" },
-  { rank: 41, name: "[KKPD] Chanom Howzler", cars: ["t20"], source: "event8", note: "🌟 Event 8 (อันดับ 10)" },
-  { rank: 42, name: "[KKPD] Song Marzano", cars: ["corsita"], source: "event8", note: "🌟 Event 8 (อันดับ 11)" },
-  { rank: 43, name: "[KKPD] John Doe", cars: ["furia"], source: "event8", note: "🌟 Event 8 (อันดับ 12)" },
-  { rank: 44, name: "[KKPD]Dillan Bragg", cars: ["t20"], source: "event8", note: "🌟 Event 8 (อันดับ 13)" },
-  { rank: 45, name: "[KKPD] Thoshilo Bakery", cars: ["r32"], source: "event8", note: "🌟 Event 8 (อันดับ 15)" },
-  { rank: 46, name: "[KKPD] Pucca Kor IGjaOcRoi", cars: ["corsita"], source: "event8", note: "🌟 Event 8 (อันดับ 16)" },
-  { rank: 47, name: "[KKPD] Akki Autsawapatcharakul", cars: ["r32"], source: "event8", note: "🌟 Event 8 (อันดับ 17)" },
-  { rank: 48, name: "[KKPD] LAZER DIM", cars: ["furia"], source: "event8", note: "🌟 Event 8 (อันดับ 18)" },
-  { rank: 49, name: "[KKPD] Gaiar OsiMarzanoJingjing", cars: ["r32"], source: "event8", note: "🌟 Event 8 (อันดับ 19)" },
-  { rank: 50, name: "[KKPD] Khana Fahwabwab", cars: ["furia"], source: "event8", note: "🌟 Event 8 (อันดับ 20)" }
+  { rank: 1, name: "Ainz D. Camillos", cars: [{ key: "corsita", plate: "KKPD 111" }, { key: "c8", plate: "KKPD 266" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 2, name: "JaJa Osi", cars: [{ key: "corsita", plate: "KKPD 108" }, { key: "banshee", plate: "KKPD 300" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 3, name: "John Ratchada", cars: [{ key: "corsita", plate: "KKPD 113" }, { key: "r32", plate: "KKPD 160" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 4, name: "Mateo", cars: [{ key: "t20", plate: "KKPD 189" }, { key: "banshee", plate: "KKPD 306" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 5, name: "Mini chabuu", cars: [{ key: "corsita", plate: "KKPD 112" }, { key: "banshee", plate: "KKPD 308" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 6, name: "Suwit.S", cars: [{ key: "corsita", plate: "KKPD 109" }, { key: "r32", plate: "KKPD 171" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 7, name: "Tatto Horsepower", cars: [{ key: "c8", plate: "KKPD 276" }, { key: "banshee", plate: "KKPD 311" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 8, name: "WHY WANG JEXNG", cars: [{ key: "corsita", plate: "KKPD 117" }, { key: "banshee", plate: "KKPD 303" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 9, name: "Snim", cars: [{ key: "r32", plate: "KKPD 155" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 10, name: "Brave", cars: [{ key: "r32", plate: "KKPD 162" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 11, name: "Tawanchai", cars: [{ key: "r32", plate: "KKPD 163" }, { key: "t20", plate: "KKPD 271" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 12, name: "Jack", cars: [{ key: "t20", plate: "KKPD 198" }, { key: "banshee", plate: "KKPD 304" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 13, name: "DEW", cars: [{ key: "r32", plate: "KKPD 170" }, { key: "t20", plate: "KKPD 193" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 14, name: "Ukalyp Tus", cars: [{ key: "corsita", plate: "KKPD 247" }, { key: "c8", plate: "KKPD 274" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 15, name: "Hmee naja", cars: [{ key: "corsita", plate: "KKPD 249" }, { key: "c8", plate: "KKPD 277" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 16, name: "Baron", cars: [{ key: "t20", plate: "KKPD 190" }, { key: "c8", plate: "KKPD 272" }], source: "existing", note: "ข้อมูลเดิม (T20 + C8)" },
+  { rank: 17, name: "Thoy", cars: [{ key: "t20", plate: "KKPD 195" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 18, name: "Lpa", cars: [{ key: "r32", plate: "KKPD 254" }, { key: "banshee", plate: "KKPD 305" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 19, name: "ROOT", cars: [{ key: "t20", plate: "KKPD 202" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 20, name: "JINJUN", cars: [{ key: "r32", plate: "KKPD 252" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 21, name: "MOJI", cars: [{ key: "c8", plate: "KKPD 275" }, { key: "banshee", plate: "KKPD 309" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 22, name: "Black", cars: [{ key: "t20", plate: "KKPD 255" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 23, name: "Bel", cars: [{ key: "c8", plate: "KKPD 267" }, { key: "banshee", plate: "KKPD 302" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 24, name: "Winter", cars: [{ key: "c8", plate: "KKPD 278" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 25, name: "Brown Nie", cars: [{ key: "banshee", plate: "KKPD 301" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 26, name: "Mellow", cars: [{ key: "banshee", plate: "KKPD 307" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 27, name: "NamNungs", cars: [{ key: "banshee", plate: "KKPD 310" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 28, name: "WHITE Waikonloei", cars: [{ key: "banshee", plate: "KKPD 312" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 29, name: "Milo / [KKPD] Milo Emilian Marquez", cars: [{ key: "banshee", plate: "KKPD 313" }, { key: "corsita", plate: "KKPD 420" }], source: "both", note: "เดิม Banshee + ได้ Corsita" },
+  { rank: 30, name: "Chucky", cars: [{ key: "furia", plate: "KKPD 131" }], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 31, name: "Leo", cars: [{ key: "furia", plate: "KKPD 250" }], source: "existing", note: "ข้อมูลเดิม" },
+  // Event 8 Winners (20 cars, sequential plates KKPD 407 -> KKPD 426)
+  { rank: 32, name: "[kkpd]sakkarin dowlie", cars: [{ key: "c8", plate: "KKPD 407" }], source: "event8", note: "🌟 Event 8 (อันดับ 1)" },
+  { rank: 33, name: "[KKPD] Kimmy Siriphapa", cars: [{ key: "c8", plate: "KKPD 408" }], source: "event8", note: "🌟 Event 8 (อันดับ 2)" },
+  { rank: 34, name: "[KKPD] KHUNKHAI Eisenwall", cars: [{ key: "c8", plate: "KKPD 409" }], source: "event8", note: "🌟 Event 8 (อันดับ 3)" },
+  { rank: 35, name: "[KKPD] Seua Osi", cars: [{ key: "banshee", plate: "KKPD 410" }], source: "event8", note: "🌟 Event 8 (อันดับ 4)" },
+  { rank: 36, name: "[KKPD] Kair Osi", cars: [{ key: "banshee", plate: "KKPD 411" }], source: "event8", note: "🌟 Event 8 (อันดับ 5)" },
+  { rank: 37, name: "[KKPD] Chalam Noi", cars: [{ key: "banshee", plate: "KKPD 412" }], source: "event8", note: "🌟 Event 8 (อันดับ 6)" },
+  { rank: 38, name: "[KKPD] Kkr Kaliona", cars: [{ key: "banshee", plate: "KKPD 413" }], source: "event8", note: "🌟 Event 8 (อันดับ 7)" },
+  { rank: 39, name: "[KKPD] Tarik Monique", cars: [{ key: "banshee", plate: "KKPD 414" }], source: "event8", note: "🌟 Event 8 (อันดับ 8)" },
+  { rank: 40, name: "[KKPD] ASGARD DEEJINGJING", cars: [{ key: "t20", plate: "KKPD 415" }], source: "event8", note: "🌟 Event 8 (อันดับ 9)" },
+  { rank: 41, name: "[KKPD] Chanom Howzler", cars: [{ key: "t20", plate: "KKPD 416" }], source: "event8", note: "🌟 Event 8 (อันดับ 10)" },
+  { rank: 42, name: "[KKPD] Song Marzano", cars: [{ key: "corsita", plate: "KKPD 417" }], source: "event8", note: "🌟 Event 8 (อันดับ 11)" },
+  { rank: 43, name: "[KKPD] John Doe", cars: [{ key: "furia", plate: "KKPD 418" }], source: "event8", note: "🌟 Event 8 (อันดับ 12)" },
+  { rank: 44, name: "[KKPD]Dillan Bragg", cars: [{ key: "t20", plate: "KKPD 419" }], source: "event8", note: "🌟 Event 8 (อันดับ 13)" },
+  { rank: 45, name: "[KKPD] Thoshilo Bakery", cars: [{ key: "r32", plate: "KKPD 421" }], source: "event8", note: "🌟 Event 8 (อันดับ 15)" },
+  { rank: 46, name: "[KKPD] Pucca Kor IGjaOcRoi", cars: [{ key: "corsita", plate: "KKPD 422" }], source: "event8", note: "🌟 Event 8 (อันดับ 16)" },
+  { rank: 47, name: "[KKPD] Akki Autsawapatcharakul", cars: [{ key: "r32", plate: "KKPD 423" }], source: "event8", note: "🌟 Event 8 (อันดับ 17)" },
+  { rank: 48, name: "[KKPD] LAZER DIM", cars: [{ key: "furia", plate: "KKPD 424" }], source: "event8", note: "🌟 Event 8 (อันดับ 18)" },
+  { rank: 49, name: "[KKPD] Gaiar OsiMarzanoJingjing", cars: [{ key: "r32", plate: "KKPD 425" }], source: "event8", note: "🌟 Event 8 (อันดับ 19)" },
+  { rank: 50, name: "[KKPD] Khana Fahwabwab", cars: [{ key: "furia", plate: "KKPD 426" }], source: "event8", note: "🌟 Event 8 (อันดับ 20)" }
 ];
 
 let masterState = {
@@ -1582,7 +1582,7 @@ function renderMasterBadges() {
   const counts = { banshee: 0, r32: 0, corsita: 0, t20: 0, c8: 0, furia: 0 };
   MASTER_DATA.forEach(p => {
     p.cars.forEach(c => {
-      if (counts[c] !== undefined) counts[c]++;
+      if (counts[c.key] !== undefined) counts[c.key]++;
     });
   });
 
@@ -1608,19 +1608,21 @@ function renderMasterBadges() {
 
 function getFilteredMasterData() {
   return MASTER_DATA.filter(item => {
-    // Search match
+    const carKeys = item.cars.map(c => c.key);
+    // Search match (name, note, car name, plate)
     if (masterState.search) {
       const nameMatch = item.name.toLowerCase().includes(masterState.search);
       const noteMatch = item.note.toLowerCase().includes(masterState.search);
-      const carMatch = item.cars.some(c => CARS[c] && CARS[c].name.toLowerCase().includes(masterState.search));
-      if (!nameMatch && !noteMatch && !carMatch) return false;
+      const carMatch = carKeys.some(c => CARS[c] && CARS[c].name.toLowerCase().includes(masterState.search));
+      const plateMatch = item.cars.some(c => c.plate && c.plate.toLowerCase().includes(masterState.search));
+      if (!nameMatch && !noteMatch && !carMatch && !plateMatch) return false;
     }
 
     // Filter match
     if (masterState.filter === "all") return true;
     if (masterState.filter === "multi") return item.cars.length >= 2;
     if (masterState.filter === "event8") return item.source === "event8" || item.source === "both";
-    return item.cars.includes(masterState.filter);
+    return carKeys.includes(masterState.filter);
   });
 }
 
@@ -1640,12 +1642,12 @@ function renderMasterTable(list) {
   }
 
   tbody.innerHTML = list.map((item, idx) => {
-    const hasCorsita = item.cars.includes("corsita");
-    const hasR32 = item.cars.includes("r32");
-    const hasT20 = item.cars.includes("t20");
-    const hasC8 = item.cars.includes("c8");
-    const hasFuria = item.cars.includes("furia");
-    const hasBanshee = item.cars.includes("banshee");
+    const carObjMap = {};
+    item.cars.forEach(c => {
+      carObjMap[c.key] = c;
+    });
+
+    const isEvent8 = item.source === "event8";
     const totalCount = item.cars.length;
 
     let sourceClass = "existing";
@@ -1658,28 +1660,24 @@ function renderMasterTable(list) {
       sourceLabel = "เดิม + Event 8";
     }
 
+    const renderCarCell = (carKey) => {
+      const carObj = carObjMap[carKey];
+      if (!carObj) {
+        return `<span class="cell-car-check no-car">-</span>`;
+      }
+      return `<div class="plate-pill ${isEvent8 ? 'event8' : ''}" title="${CARS[carKey]?.name || carKey}"><i class="fa-solid fa-id-card"></i> ${carObj.plate}</div>`;
+    };
+
     return `
       <tr>
-        <td style="text-align: center; color: var(--text-muted);">${item.rank}</td>
+        <td style="text-align: center; color: var(--text-muted); font-family: var(--font-heading); font-weight:700;">${item.rank}</td>
         <td style="font-weight: 600; color: #fff;">${item.name}</td>
-        <td style="text-align: center;">
-          <span class="cell-car-check ${hasCorsita ? 'has-car' : 'no-car'}">${hasCorsita ? '✓' : '-'}</span>
-        </td>
-        <td style="text-align: center;">
-          <span class="cell-car-check ${hasR32 ? 'has-car' : 'no-car'}">${hasR32 ? '✓' : '-'}</span>
-        </td>
-        <td style="text-align: center;">
-          <span class="cell-car-check ${hasT20 ? 'has-car' : 'no-car'}">${hasT20 ? '✓' : '-'}</span>
-        </td>
-        <td style="text-align: center;">
-          <span class="cell-car-check ${hasC8 ? 'has-car' : 'no-car'}">${hasC8 ? '✓' : '-'}</span>
-        </td>
-        <td style="text-align: center;">
-          <span class="cell-car-check ${hasFuria ? 'has-car' : 'no-car'}">${hasFuria ? '✓' : '-'}</span>
-        </td>
-        <td style="text-align: center;">
-          <span class="cell-car-check ${hasBanshee ? 'has-car' : 'no-car'}">${hasBanshee ? '✓' : '-'}</span>
-        </td>
+        <td style="text-align: center;">${renderCarCell("corsita")}</td>
+        <td style="text-align: center;">${renderCarCell("r32")}</td>
+        <td style="text-align: center;">${renderCarCell("t20")}</td>
+        <td style="text-align: center;">${renderCarCell("c8")}</td>
+        <td style="text-align: center;">${renderCarCell("furia")}</td>
+        <td style="text-align: center;">${renderCarCell("banshee")}</td>
         <td style="text-align: center;">
           <span class="badge-total-cars ${totalCount >= 2 ? 'multi' : 'single'}">${totalCount} คัน</span>
         </td>
@@ -1698,7 +1696,19 @@ function renderMasterModelRosters(list) {
   container.innerHTML = "";
   for (const carKey in CARS) {
     const car = CARS[carKey];
-    const owners = list.filter(p => p.cars.includes(carKey));
+    const ownersWithCar = [];
+    list.forEach(p => {
+      const matchCar = p.cars.find(c => c.key === carKey);
+      if (matchCar) {
+        ownersWithCar.push({
+          rank: p.rank,
+          name: p.name,
+          source: p.source,
+          plate: matchCar.plate,
+          note: p.note
+        });
+      }
+    });
 
     const card = document.createElement("div");
     card.className = "model-roster-card";
@@ -1710,13 +1720,19 @@ function renderMasterModelRosters(list) {
           <i class="fa-solid ${car.icon}" style="color:${car.color}"></i>
           <span>${car.name}</span>
         </div>
-        <span class="model-roster-count">${owners.length} คัน</span>
+        <span class="model-roster-count">${ownersWithCar.length} คัน</span>
       </div>
       <div class="model-roster-owners-list">
-        ${owners.length ? owners.map(o => `
+        ${ownersWithCar.length ? ownersWithCar.map((o, i) => `
           <div class="model-owner-item">
-            <span class="model-owner-name">${o.name}</span>
-            <span class="source-badge ${o.source === 'event8' ? 'event8' : o.source === 'both' ? 'both' : 'existing'}">${o.source === 'event8' ? 'Event 8' : o.source === 'both' ? 'เดิม + Event 8' : 'เดิม'}</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="color:var(--text-muted); font-size:0.75rem; min-width:18px;">${i + 1}.</span>
+              <span class="model-owner-name">${o.name}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div class="plate-pill ${o.source === 'event8' ? 'event8' : ''}"><i class="fa-solid fa-id-card"></i> ${o.plate}</div>
+              <span class="source-badge ${o.source === 'event8' ? 'event8' : o.source === 'both' ? 'both' : 'existing'}">${o.source === 'event8' ? 'Event 8' : o.source === 'both' ? 'เดิม + Event 8' : 'เดิม'}</span>
+            </div>
           </div>
         `).join("") : `<div style="color:var(--text-muted); text-align:center; padding:20px 0;">ไม่มีรายชื่อที่ตรงกับเงื่อนไข</div>`}
       </div>
@@ -1727,15 +1743,23 @@ function renderMasterModelRosters(list) {
 }
 
 function copyMasterDataDiscord() {
-  let text = `📊 **สรุปฐานข้อมูลการครอบครองรถ KKPD Master Vehicle Database (รวม 68 คัน)** 🏎️✨\n`;
+  let text = `📊 **สรุปฐานข้อมูลทะเบียนรถ KKPD Master Vehicle Database (รวม 68 คัน)** 🏎️✨\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
   for (const carKey in CARS) {
     const car = CARS[carKey];
-    const owners = MASTER_DATA.filter(p => p.cars.includes(carKey));
-    text += `🏎️ **${car.name}** (${owners.length} คัน):\n`;
-    owners.forEach((o, i) => {
-      text += `  ${(i + 1).toString().padStart(2, ' ')}. ${o.name}\n`;
+    const ownersWithCar = [];
+    MASTER_DATA.forEach(p => {
+      const matchCar = p.cars.find(c => c.key === carKey);
+      if (matchCar) {
+        ownersWithCar.push({ name: p.name, plate: matchCar.plate, source: p.source });
+      }
+    });
+
+    text += `🏎️ **${car.name}** (${ownersWithCar.length} คัน):\n`;
+    ownersWithCar.forEach((o, i) => {
+      const tag = o.source === 'event8' ? ' *(Event 8)*' : '';
+      text += `  ${(i + 1).toString().padStart(2, ' ')}. \`[${o.plate}]\` ${o.name}${tag}\n`;
     });
     text += `\n`;
   }
@@ -1744,29 +1768,28 @@ function copyMasterDataDiscord() {
   text += `👥 รวมผู้ถือครองทั้งหมด: 50 คน • ยอดรถรวม: 68 คัน`;
 
   navigator.clipboard.writeText(text).then(() => {
-    showToast("คัดลอกสรุปสำหรับ Discord เรียบร้อยแล้ว!", "success");
+    showToast("คัดลอกสรุปพร้อมป้ายทะเบียนสำหรับ Discord เรียบร้อยแล้ว!", "success");
   });
 }
 
 function exportMasterDataCSV() {
-  let csv = "\uFEFFลำดับ,รายชื่อสมาชิก,Corsita,R32,T20,C8,Furia,Banshee,จำนวนรวม,ที่มา\n";
+  let csv = "\uFEFFลำดับ,รายชื่อสมาชิก,Corsita,R32,T20,C8,Furia,Banshee,จำนวนรวม,ป้ายทะเบียนทั้งหมด,ที่มา\n";
   MASTER_DATA.forEach(p => {
-    const cCorsita = p.cars.includes("corsita") ? "1" : "0";
-    const cR32 = p.cars.includes("r32") ? "1" : "0";
-    const cT20 = p.cars.includes("t20") ? "1" : "0";
-    const cC8 = p.cars.includes("c8") ? "1" : "0";
-    const cFuria = p.cars.includes("furia") ? "1" : "0";
-    const cBanshee = p.cars.includes("banshee") ? "1" : "0";
-    csv += `"${p.rank}","${p.name}","${cCorsita}","${cR32}","${cT20}","${cC8}","${cFuria}","${cBanshee}","${p.cars.length}","${p.note}"\n`;
+    const getPlate = (k) => {
+      const match = p.cars.find(c => c.key === k);
+      return match ? match.plate : "-";
+    };
+    const allPlates = p.cars.map(c => `${CARS[c.key]?.name || c.key}: ${c.plate}`).join(" | ");
+    csv += `"${p.rank}","${p.name}","${getPlate('corsita')}","${getPlate('r32')}","${getPlate('t20')}","${getPlate('c8')}","${getPlate('furia')}","${getPlate('banshee')}","${p.cars.length}","${allPlates}","${p.note}"\n`;
   });
 
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const downloadAnchor = document.createElement('a');
   downloadAnchor.setAttribute("href", url);
-  downloadAnchor.setAttribute("download", `kkpd_master_vehicle_data_${Date.now()}.csv`);
+  downloadAnchor.setAttribute("download", `kkpd_master_vehicle_plates_${Date.now()}.csv`);
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();
   downloadAnchor.remove();
-  showToast("ส่งออกไฟล์ CSV สำเร็จแล้ว", "success");
+  showToast("ส่งออกไฟล์ CSV ทะเบียนรถสำเร็จแล้ว", "success");
 }

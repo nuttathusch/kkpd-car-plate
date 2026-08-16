@@ -2239,3 +2239,44 @@ body {
 .master-view-container.hidden {
   display: none !important;
 }
+
+/* License Plate Badges */
+.plate-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 4px;
+  padding: 3px 7px;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fde047;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  transition: var(--trans-fast);
+}
+
+.plate-pill:hover {
+  border-color: #fde047;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);
+}
+
+.plate-pill.event8 {
+  border-color: rgba(0, 240, 255, 0.45);
+  color: var(--accent-cyan);
+}
+
+.plate-pill.event8:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 2px 6px rgba(0, 240, 255, 0.3);
+}
+
+.plate-pill i {
+  font-size: 0.62rem;
+  opacity: 0.8;
+}
+
