@@ -88,6 +88,24 @@
           </div>
         </div>
 
+        <!-- Roster Submission Status Section (Overview of 20 Players) -->
+        <div class="roster-status-section">
+          <div class="roster-status-header">
+            <div class="roster-status-title">
+              <i class="fa-solid fa-users-viewfinder"></i>
+              <h3>สถานะการส่งข้อมูลของผู้เข้าร่วม 20 ลำดับ</h3>
+            </div>
+            <div class="roster-status-legend">
+              <span class="legend-item"><span class="status-dot dot-green"></span> เลือกแล้ว (<span id="legendDoneCount">0</span>)</span>
+              <span class="legend-item"><span class="status-dot dot-red"></span> ยังไม่ได้เลือก (<span id="legendPendingCount">20</span>)</span>
+            </div>
+          </div>
+
+          <div class="roster-chips-grid" id="rosterChipsGrid">
+            <!-- 20 compact player cards rendered dynamically -->
+          </div>
+        </div>
+
         <div class="form-grid">
           <!-- Step 1: Select Player -->
           <div class="step-card step-player-select">

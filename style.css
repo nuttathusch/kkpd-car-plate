@@ -343,6 +343,158 @@ body {
    TAB 1: Form & Ranking Cards
    ========================================================================== */
 
+/* Roster Submission Status Section (Overview of 20 players) */
+.roster-status-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.roster-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.roster-status-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.roster-status-title i {
+  color: var(--accent-cyan);
+  font-size: 1.15rem;
+}
+
+.roster-status-title h3 {
+  font-size: 1.05rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.roster-status-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.82rem;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.dot-green {
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.dot-red {
+  background-color: var(--accent-rose);
+  box-shadow: 0 0 6px rgba(244, 63, 94, 0.4);
+}
+
+/* 20 Player Status Chips Grid */
+.roster-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 10px;
+}
+
+.roster-status-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  transition: var(--trans-fast);
+  cursor: pointer;
+  user-select: none;
+}
+
+.roster-status-chip:hover {
+  background: var(--bg-surface-active);
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+}
+
+.roster-status-chip.active-selected {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.chip-player-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.chip-rank-badge {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--accent-amber);
+  background: rgba(245, 158, 11, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.chip-player-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.chip-status-badge.submitted {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.chip-status-badge.pending {
+  background: rgba(244, 63, 94, 0.08);
+  color: #fca5a5;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: 360px 1fr;

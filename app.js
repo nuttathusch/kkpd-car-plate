@@ -336,6 +336,9 @@ const DOM = {
   tabContents: document.querySelectorAll(".tab-content"),
   submittedCount: document.getElementById("submittedCount"),
   playerSelect: document.getElementById("playerSelect"),
+  rosterChipsGrid: document.getElementById("rosterChipsGrid"),
+  legendDoneCount: document.getElementById("legendDoneCount"),
+  legendPendingCount: document.getElementById("legendPendingCount"),
   pinSecurityBox: document.getElementById("pinSecurityBox"),
   playerPinInput: document.getElementById("playerPinInput"),
   btnVerifyPin: document.getElementById("btnVerifyPin"),
@@ -536,9 +539,45 @@ function setupDragAndDrop(card, container, orderArray, context) {
 function renderFullState() {
   const { results, currentStock, allocatedCount, rosterByCar } = computeAllocation();
   const submittedTotal = Object.keys(state.preferences).length;
+  const pendingTotal = PARTICIPANTS.length - submittedTotal;
 
   DOM.submittedCount.textContent = submittedTotal;
   DOM.stockStatusTag.textContent = `จัดสรรแล้ว ${allocatedCount} / 20 คัน`;
+
+  // 0. Tab 1: 20 Participants Roster Submission Status (Green / Red indicator)
+  if (DOM.rosterChipsGrid) {
+    DOM.legendDoneCount.textContent = submittedTotal;
+    DOM.legendPendingCount.textContent = pendingTotal;
+    DOM.rosterChipsGrid.innerHTML = "";
+
+    PARTICIPANTS.forEach(p => {
+      const isSubmitted = !!state.preferences[p.id];
+      const isCurrentlySelected = state.selectedPlayerId === p.id;
+      const chip = document.createElement("div");
+      chip.className = `roster-status-chip ${isCurrentlySelected ? 'active-selected' : ''}`;
+      chip.dataset.playerId = p.id;
+      chip.title = `คลิกเพื่อเลือก ${p.name}`;
+
+      chip.innerHTML = `
+        <div class="chip-player-left">
+          <span class="chip-rank-badge">#${p.rank}</span>
+          <span class="chip-player-name">${p.name}</span>
+        </div>
+        <div class="chip-status-badge ${isSubmitted ? 'submitted' : 'pending'}">
+          <span class="status-dot ${isSubmitted ? 'dot-green' : 'dot-red'}"></span>
+          <span>${isSubmitted ? 'เลือกแล้ว' : 'ยังไม่เลือก'}</span>
+        </div>
+      `;
+
+      chip.addEventListener("click", () => {
+        DOM.playerSelect.value = p.id;
+        DOM.playerSelect.dispatchEvent(new Event("change"));
+        DOM.playerSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      DOM.rosterChipsGrid.appendChild(chip);
+    });
+  }
 
   // Stock Overview Cards
   DOM.stockCardsGrid.innerHTML = "";
