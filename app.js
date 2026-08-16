@@ -60,7 +60,7 @@ function generateRandom4DigitPin(excludeSet = new Set()) {
   return pin;
 }
 
-const MASTER_ADMIN_PIN = "9999";
+const MASTER_ADMIN_PIN = "9936";
 
 const CARS = {
   banshee: {
@@ -1046,7 +1046,7 @@ DOM.btnCopyAllPins.addEventListener("click", () => {
     pinListText += `อันดับ ${p.rank.toString().padStart(2, ' ')}. ${p.name} ➡️ รหัส PIN: **${pin}**\n`;
   });
   pinListText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  pinListText += `*(Master Admin PIN: 9999)*`;
+  pinListText += `*(Master Admin PIN: 9936)*`;
 
   navigator.clipboard.writeText(pinListText).then(() => {
     AudioEngine.play('success');
@@ -1218,7 +1218,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Check Admin URL parameter (e.g. ?admin=9999)
+  // Check Admin URL parameter (e.g. ?admin=9936)
   const paramAdmin = urlParams.get("admin");
   if (paramAdmin && paramAdmin === MASTER_ADMIN_PIN) {
     state.isAdminAuthenticated = true;
