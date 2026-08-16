@@ -83,6 +83,10 @@
         <i class="fa-solid fa-sliders"></i>
         <span>3. จัดการ & สรุปผล (Admin)</span>
       </button>
+      <button class="tab-btn" data-tab="tab-masterdata" id="tabBtnMasterData">
+        <i class="fa-solid fa-database"></i>
+        <span>4. ข้อมูลการครอบครองรถ (Master Data)</span>
+      </button>
     </nav>
 
     <!-- Main Content Area -->
@@ -425,6 +429,126 @@
               </button>
             </div>
             <pre id="announcementText" class="code-preview">กดปุ่มสุ่มข้อมูล หรือรอให้สมาชิกส่งข้อมูลครบเพื่อดูตัวอย่างข้อความประกาศ...</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: Master Vehicle Ownership Database -->
+      <section id="tab-masterdata" class="tab-content">
+        <div class="section-hero">
+          <div class="hero-text">
+            <h2><i class="fa-solid fa-database"></i> ฐานข้อมูลการครอบครองรถทั้งหมด (Master Vehicle Database)</h2>
+            <p>
+              รวบรวมข้อมูลการถือครองรถทั้งหมด <strong>68 คัน</strong> จาก <strong>50 สมาชิก</strong> (อัปเดตรวมผลลัพธ์จากกิจกรรม KKPD Special Event ครั้งที่ 8 ล่าสุด)
+            </p>
+          </div>
+          <div class="hero-controls">
+            <button id="btnCopyMasterDiscord" class="btn-accent">
+              <i class="fa-solid fa-copy"></i> คัดลอกสรุปสำหรับ Discord
+            </button>
+            <button id="btnExportMasterCSV" class="btn-secondary">
+              <i class="fa-solid fa-file-csv"></i> ส่งออกไฟล์ CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Master Data Stats Grid -->
+        <div class="master-stats-grid">
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-cyan); background:rgba(0,240,255,0.12)"><i class="fa-solid fa-car-side"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">รถในเซิร์ฟเวอร์ทั้งหมด</span>
+              <div class="master-stat-val">68 <small>คัน</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-purple); background:rgba(168,85,247,0.12)"><i class="fa-solid fa-users"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">จำนวนผู้ครอบครอง</span>
+              <div class="master-stat-val">50 <small>คน</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-amber); background:rgba(245,158,11,0.12)"><i class="fa-solid fa-fire"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">รุ่นยอดนิยมอันดับ 1</span>
+              <div class="master-stat-val">Banshee <small>(19 คัน)</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-emerald); background:rgba(16,185,129,0.12)"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">ถือครอง 2 คันขึ้นไป</span>
+              <div class="master-stat-val">17 <small>คน</small></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Car Model Badges Row -->
+        <div class="master-car-badges-row" id="masterCarBadgesRow">
+          <!-- Populated dynamically with 6 car models -->
+        </div>
+
+        <!-- Master Data Search & Filter Controls -->
+        <div class="master-filter-card">
+          <div class="master-search-row">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="masterSearchInput" class="styled-input search-input" placeholder="🔍 ค้นหาชื่อสมาชิก เช่น Baron, Milo, Suwit, sakkarin...">
+              <button id="btnClearSearch" class="btn-clear-search hidden"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="master-view-toggle">
+              <button id="btnViewTable" class="btn-toggle active" title="มุมมองตาราง Master Table">
+                <i class="fa-solid fa-table-list"></i> ตาราง
+              </button>
+              <button id="btnViewModel" class="btn-toggle" title="มุมมองแยกตามรุ่นรถ">
+                <i class="fa-solid fa-grip"></i> แยกตามรุ่น
+              </button>
+            </div>
+          </div>
+
+          <div class="master-filter-chips" id="masterFilterChips">
+            <button class="filter-chip active" data-filter="all">ทั้งหมด (50)</button>
+            <button class="filter-chip" data-filter="banshee">Banshee (19)</button>
+            <button class="filter-chip" data-filter="r32">R32 (11)</button>
+            <button class="filter-chip" data-filter="corsita">Corsita (11)</button>
+            <button class="filter-chip" data-filter="t20">T20 (11)</button>
+            <button class="filter-chip" data-filter="c8">C8 (11)</button>
+            <button class="filter-chip" data-filter="furia">Furia (5)</button>
+            <button class="filter-chip" data-filter="multi">⚡ ถือครอง 2+ คัน (17)</button>
+            <button class="filter-chip" data-filter="event8">🌟 จาก Event 8 (20)</button>
+          </div>
+        </div>
+
+        <!-- View 1: Master Table -->
+        <div id="masterTableView" class="master-view-container">
+          <div class="table-container">
+            <table class="styled-table master-table">
+              <thead>
+                <tr>
+                  <th style="width: 60px; text-align: center;">ลำดับ</th>
+                  <th>รายชื่อสมาชิก</th>
+                  <th style="text-align: center;">Corsita</th>
+                  <th style="text-align: center;">R32</th>
+                  <th style="text-align: center;">T20</th>
+                  <th style="text-align: center;">C8</th>
+                  <th style="text-align: center;">Furia</th>
+                  <th style="text-align: center;">Banshee</th>
+                  <th style="text-align: center; width: 100px;">จำนวนรวม</th>
+                  <th>ที่มา</th>
+                </tr>
+              </thead>
+              <tbody id="masterTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- View 2: Grouped by Car Model Grid -->
+        <div id="masterModelView" class="master-view-container hidden">
+          <div class="model-roster-grid" id="modelRosterGrid">
+            <!-- Populated dynamically -->
           </div>
         </div>
       </section>

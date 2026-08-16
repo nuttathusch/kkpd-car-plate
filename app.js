@@ -1427,4 +1427,346 @@ document.addEventListener("DOMContentLoaded", () => {
     state.isAdminAuthenticated = true;
     showToast("🔑 ปลดล็อกสิทธิ์ Admin อัตโนมัติแล้ว", "info");
   }
+
+  // Initialize Tab 4 Master Data
+  initMasterData();
 });
+
+// ==========================================
+// 12. TAB 4: MASTER VEHICLE OWNERSHIP DATABASE
+// ==========================================
+
+const MASTER_DATA = [
+  { rank: 1, name: "Ainz D. Camillos", cars: ["corsita", "c8"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 2, name: "JaJa Osi", cars: ["corsita", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 3, name: "John Ratchada", cars: ["corsita", "r32"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 4, name: "Mateo", cars: ["t20", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 5, name: "Mini chabuu", cars: ["corsita", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 6, name: "Suwit.S", cars: ["corsita", "r32"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 7, name: "Tatto Horsepower", cars: ["c8", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 8, name: "WHY WANG JEXNG", cars: ["corsita", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 9, name: "Snim", cars: ["r32"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 10, name: "Brave", cars: ["r32"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 11, name: "Tawanchai", cars: ["r32", "t20"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 12, name: "Jack", cars: ["t20", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 13, name: "DEW", cars: ["r32", "t20"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 14, name: "Ukalyp Tus", cars: ["corsita", "c8"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 15, name: "Hmee naja", cars: ["corsita", "c8"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 16, name: "Baron", cars: ["t20", "c8"], source: "existing", note: "ข้อมูลเดิม (T20 + C8)" },
+  { rank: 17, name: "Thoy", cars: ["t20"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 18, name: "Lpa", cars: ["r32", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 19, name: "ROOT", cars: ["t20"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 20, name: "JINJUN", cars: ["r32"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 21, name: "MOJI", cars: ["c8", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 22, name: "Black", cars: ["t20"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 23, name: "Bel", cars: ["c8", "banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 24, name: "Winter", cars: ["c8"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 25, name: "Brown Nie", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 26, name: "Mellow", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 27, name: "NamNungs", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 28, name: "WHITE Waikonloei", cars: ["banshee"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 29, name: "Milo / [KKPD] Milo Emilian Marquez", cars: ["banshee", "corsita"], source: "both", note: "เดิม Banshee + ได้ Corsita" },
+  { rank: 30, name: "Chucky", cars: ["furia"], source: "existing", note: "ข้อมูลเดิม" },
+  { rank: 31, name: "Leo", cars: ["furia"], source: "existing", note: "ข้อมูลเดิม" },
+  // Event 8 Winners (20 cars)
+  { rank: 32, name: "[kkpd]sakkarin dowlie", cars: ["c8"], source: "event8", note: "🌟 Event 8 (อันดับ 1)" },
+  { rank: 33, name: "[KKPD] Kimmy Siriphapa", cars: ["c8"], source: "event8", note: "🌟 Event 8 (อันดับ 2)" },
+  { rank: 34, name: "[KKPD] KHUNKHAI Eisenwall", cars: ["c8"], source: "event8", note: "🌟 Event 8 (อันดับ 3)" },
+  { rank: 35, name: "[KKPD] Seua Osi", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 4)" },
+  { rank: 36, name: "[KKPD] Kair Osi", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 5)" },
+  { rank: 37, name: "[KKPD] Chalam Noi", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 6)" },
+  { rank: 38, name: "[KKPD] Kkr Kaliona", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 7)" },
+  { rank: 39, name: "[KKPD] Tarik Monique", cars: ["banshee"], source: "event8", note: "🌟 Event 8 (อันดับ 8)" },
+  { rank: 40, name: "[KKPD] ASGARD DEEJINGJING", cars: ["t20"], source: "event8", note: "🌟 Event 8 (อันดับ 9)" },
+  { rank: 41, name: "[KKPD] Chanom Howzler", cars: ["t20"], source: "event8", note: "🌟 Event 8 (อันดับ 10)" },
+  { rank: 42, name: "[KKPD] Song Marzano", cars: ["corsita"], source: "event8", note: "🌟 Event 8 (อันดับ 11)" },
+  { rank: 43, name: "[KKPD] John Doe", cars: ["furia"], source: "event8", note: "🌟 Event 8 (อันดับ 12)" },
+  { rank: 44, name: "[KKPD]Dillan Bragg", cars: ["t20"], source: "event8", note: "🌟 Event 8 (อันดับ 13)" },
+  { rank: 45, name: "[KKPD] Thoshilo Bakery", cars: ["r32"], source: "event8", note: "🌟 Event 8 (อันดับ 15)" },
+  { rank: 46, name: "[KKPD] Pucca Kor IGjaOcRoi", cars: ["corsita"], source: "event8", note: "🌟 Event 8 (อันดับ 16)" },
+  { rank: 47, name: "[KKPD] Akki Autsawapatcharakul", cars: ["r32"], source: "event8", note: "🌟 Event 8 (อันดับ 17)" },
+  { rank: 48, name: "[KKPD] LAZER DIM", cars: ["furia"], source: "event8", note: "🌟 Event 8 (อันดับ 18)" },
+  { rank: 49, name: "[KKPD] Gaiar OsiMarzanoJingjing", cars: ["r32"], source: "event8", note: "🌟 Event 8 (อันดับ 19)" },
+  { rank: 50, name: "[KKPD] Khana Fahwabwab", cars: ["furia"], source: "event8", note: "🌟 Event 8 (อันดับ 20)" }
+];
+
+let masterState = {
+  search: "",
+  filter: "all",
+  view: "table"
+};
+
+function initMasterData() {
+  renderMasterBadges();
+  renderMasterView();
+
+  const searchInput = document.getElementById("masterSearchInput");
+  const btnClearSearch = document.getElementById("btnClearSearch");
+  const filterChips = document.querySelectorAll("#masterFilterChips .filter-chip");
+  const btnViewTable = document.getElementById("btnViewTable");
+  const btnViewModel = document.getElementById("btnViewModel");
+  const btnCopyMasterDiscord = document.getElementById("btnCopyMasterDiscord");
+  const btnExportMasterCSV = document.getElementById("btnExportMasterCSV");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      masterState.search = e.target.value.trim().toLowerCase();
+      if (masterState.search) {
+        btnClearSearch.classList.remove("hidden");
+      } else {
+        btnClearSearch.classList.add("hidden");
+      }
+      renderMasterView();
+    });
+  }
+
+  if (btnClearSearch) {
+    btnClearSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      masterState.search = "";
+      btnClearSearch.classList.add("hidden");
+      renderMasterView();
+      searchInput.focus();
+    });
+  }
+
+  filterChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      AudioEngine.play('click');
+      filterChips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      masterState.filter = chip.dataset.filter;
+      renderMasterView();
+    });
+  });
+
+  if (btnViewTable && btnViewModel) {
+    btnViewTable.addEventListener("click", () => {
+      AudioEngine.play('click');
+      btnViewTable.classList.add("active");
+      btnViewModel.classList.remove("active");
+      document.getElementById("masterTableView").classList.remove("hidden");
+      document.getElementById("masterModelView").classList.add("hidden");
+      masterState.view = "table";
+    });
+
+    btnViewModel.addEventListener("click", () => {
+      AudioEngine.play('click');
+      btnViewModel.classList.add("active");
+      btnViewTable.classList.remove("active");
+      document.getElementById("masterModelView").classList.remove("hidden");
+      document.getElementById("masterTableView").classList.add("hidden");
+      masterState.view = "model";
+    });
+  }
+
+  if (btnCopyMasterDiscord) {
+    btnCopyMasterDiscord.addEventListener("click", () => {
+      AudioEngine.play('success');
+      copyMasterDataDiscord();
+    });
+  }
+
+  if (btnExportMasterCSV) {
+    btnExportMasterCSV.addEventListener("click", () => {
+      AudioEngine.play('success');
+      exportMasterDataCSV();
+    });
+  }
+}
+
+function renderMasterBadges() {
+  const container = document.getElementById("masterCarBadgesRow");
+  if (!container) return;
+
+  const counts = { banshee: 0, r32: 0, corsita: 0, t20: 0, c8: 0, furia: 0 };
+  MASTER_DATA.forEach(p => {
+    p.cars.forEach(c => {
+      if (counts[c] !== undefined) counts[c]++;
+    });
+  });
+
+  container.innerHTML = "";
+  for (const key in CARS) {
+    const car = CARS[key];
+    const badge = document.createElement("div");
+    badge.className = "master-car-badge";
+    badge.style.setProperty("--car-color", car.color);
+    badge.innerHTML = `
+      <span class="master-car-badge-name"><i class="fa-solid ${car.icon}"></i> ${car.name}</span>
+      <span class="master-car-badge-count">${counts[key] || 0} คัน</span>
+    `;
+
+    badge.addEventListener("click", () => {
+      const chip = document.querySelector(`#masterFilterChips .filter-chip[data-filter="${key}"]`);
+      if (chip) chip.click();
+    });
+
+    container.appendChild(badge);
+  }
+}
+
+function getFilteredMasterData() {
+  return MASTER_DATA.filter(item => {
+    // Search match
+    if (masterState.search) {
+      const nameMatch = item.name.toLowerCase().includes(masterState.search);
+      const noteMatch = item.note.toLowerCase().includes(masterState.search);
+      const carMatch = item.cars.some(c => CARS[c] && CARS[c].name.toLowerCase().includes(masterState.search));
+      if (!nameMatch && !noteMatch && !carMatch) return false;
+    }
+
+    // Filter match
+    if (masterState.filter === "all") return true;
+    if (masterState.filter === "multi") return item.cars.length >= 2;
+    if (masterState.filter === "event8") return item.source === "event8" || item.source === "both";
+    return item.cars.includes(masterState.filter);
+  });
+}
+
+function renderMasterView() {
+  const filtered = getFilteredMasterData();
+  renderMasterTable(filtered);
+  renderMasterModelRosters(filtered);
+}
+
+function renderMasterTable(list) {
+  const tbody = document.getElementById("masterTableBody");
+  if (!tbody) return;
+
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:30px; color:var(--text-muted);">🔍 ไม่พบรายชื่อสมาชิกที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map((item, idx) => {
+    const hasCorsita = item.cars.includes("corsita");
+    const hasR32 = item.cars.includes("r32");
+    const hasT20 = item.cars.includes("t20");
+    const hasC8 = item.cars.includes("c8");
+    const hasFuria = item.cars.includes("furia");
+    const hasBanshee = item.cars.includes("banshee");
+    const totalCount = item.cars.length;
+
+    let sourceClass = "existing";
+    let sourceLabel = "เดิม";
+    if (item.source === "event8") {
+      sourceClass = "event8";
+      sourceLabel = "Event 8";
+    } else if (item.source === "both") {
+      sourceClass = "both";
+      sourceLabel = "เดิม + Event 8";
+    }
+
+    return `
+      <tr>
+        <td style="text-align: center; color: var(--text-muted);">${item.rank}</td>
+        <td style="font-weight: 600; color: #fff;">${item.name}</td>
+        <td style="text-align: center;">
+          <span class="cell-car-check ${hasCorsita ? 'has-car' : 'no-car'}">${hasCorsita ? '✓' : '-'}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="cell-car-check ${hasR32 ? 'has-car' : 'no-car'}">${hasR32 ? '✓' : '-'}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="cell-car-check ${hasT20 ? 'has-car' : 'no-car'}">${hasT20 ? '✓' : '-'}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="cell-car-check ${hasC8 ? 'has-car' : 'no-car'}">${hasC8 ? '✓' : '-'}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="cell-car-check ${hasFuria ? 'has-car' : 'no-car'}">${hasFuria ? '✓' : '-'}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="cell-car-check ${hasBanshee ? 'has-car' : 'no-car'}">${hasBanshee ? '✓' : '-'}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="badge-total-cars ${totalCount >= 2 ? 'multi' : 'single'}">${totalCount} คัน</span>
+        </td>
+        <td>
+          <span class="source-badge ${sourceClass}">${item.note}</span>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderMasterModelRosters(list) {
+  const container = document.getElementById("modelRosterGrid");
+  if (!container) return;
+
+  container.innerHTML = "";
+  for (const carKey in CARS) {
+    const car = CARS[carKey];
+    const owners = list.filter(p => p.cars.includes(carKey));
+
+    const card = document.createElement("div");
+    card.className = "model-roster-card";
+    card.style.setProperty("--car-color", car.color);
+
+    card.innerHTML = `
+      <div class="model-roster-header">
+        <div class="model-roster-title">
+          <i class="fa-solid ${car.icon}" style="color:${car.color}"></i>
+          <span>${car.name}</span>
+        </div>
+        <span class="model-roster-count">${owners.length} คัน</span>
+      </div>
+      <div class="model-roster-owners-list">
+        ${owners.length ? owners.map(o => `
+          <div class="model-owner-item">
+            <span class="model-owner-name">${o.name}</span>
+            <span class="source-badge ${o.source === 'event8' ? 'event8' : o.source === 'both' ? 'both' : 'existing'}">${o.source === 'event8' ? 'Event 8' : o.source === 'both' ? 'เดิม + Event 8' : 'เดิม'}</span>
+          </div>
+        `).join("") : `<div style="color:var(--text-muted); text-align:center; padding:20px 0;">ไม่มีรายชื่อที่ตรงกับเงื่อนไข</div>`}
+      </div>
+    `;
+
+    container.appendChild(card);
+  }
+}
+
+function copyMasterDataDiscord() {
+  let text = `📊 **สรุปฐานข้อมูลการครอบครองรถ KKPD Master Vehicle Database (รวม 68 คัน)** 🏎️✨\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+  for (const carKey in CARS) {
+    const car = CARS[carKey];
+    const owners = MASTER_DATA.filter(p => p.cars.includes(carKey));
+    text += `🏎️ **${car.name}** (${owners.length} คัน):\n`;
+    owners.forEach((o, i) => {
+      text += `  ${(i + 1).toString().padStart(2, ' ')}. ${o.name}\n`;
+    });
+    text += `\n`;
+  }
+
+  text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `👥 รวมผู้ถือครองทั้งหมด: 50 คน • ยอดรถรวม: 68 คัน`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("คัดลอกสรุปสำหรับ Discord เรียบร้อยแล้ว!", "success");
+  });
+}
+
+function exportMasterDataCSV() {
+  let csv = "\uFEFFลำดับ,รายชื่อสมาชิก,Corsita,R32,T20,C8,Furia,Banshee,จำนวนรวม,ที่มา\n";
+  MASTER_DATA.forEach(p => {
+    const cCorsita = p.cars.includes("corsita") ? "1" : "0";
+    const cR32 = p.cars.includes("r32") ? "1" : "0";
+    const cT20 = p.cars.includes("t20") ? "1" : "0";
+    const cC8 = p.cars.includes("c8") ? "1" : "0";
+    const cFuria = p.cars.includes("furia") ? "1" : "0";
+    const cBanshee = p.cars.includes("banshee") ? "1" : "0";
+    csv += `"${p.rank}","${p.name}","${cCorsita}","${cR32}","${cT20}","${cC8}","${cFuria}","${cBanshee}","${p.cars.length}","${p.note}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", url);
+  downloadAnchor.setAttribute("download", `kkpd_master_vehicle_data_${Date.now()}.csv`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+  showToast("ส่งออกไฟล์ CSV สำเร็จแล้ว", "success");
+}
