@@ -1,7 +1,7 @@
 /**
- * KKPD MASTER GARAGE & VEHICLE REGISTRY ENGINE
- * Standalone vehicle ownership database with automatic sequential plate generation
- * and 6-digit PIN protection.
+ * KKPD MASTER GARAGE & VEHICLE REGISTRY ENGINE (v2.4)
+ * Full Vehicle Management, Sequential Auto-Plate + Custom Overrides,
+ * Admin Record Editing & Deletion with 6-Digit PIN, and Cloud KV Sync.
  */
 
 // ==========================================
@@ -3952,7 +3952,7 @@ function loadLocalVehicles() {
     const local = localStorage.getItem(STORAGE_KEY);
     if (local) {
       const parsed = JSON.parse(local);
-      if (Array.isArray(parsed) && parsed.length >= INITIAL_VEHICLES.length) {
+      if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed;
       }
     }
@@ -3983,7 +3983,7 @@ const CloudSync = {
       if (resp.ok) {
         const cloudData = await resp.json();
         if (Array.isArray(cloudData) && cloudData.length > 0) {
-          if (cloudData.length >= garageState.vehicles.length) {
+          if (JSON.stringify(cloudData) !== JSON.stringify(garageState.vehicles)) {
             garageState.vehicles = cloudData;
             saveLocalVehicles(cloudData);
             renderAll();
@@ -4166,7 +4166,10 @@ function getFilteredVehicles() {
     memberCounts[v.name] = (memberCounts[v.name] || 0) + 1;
   });
 
-  return garageState.vehicles.filter(item => {
+  return garageState.vehicles.map((item, originalIndex) => ({
+    ...item,
+    _originalIndex: originalIndex
+  })).filter(item => {
     if (garageState.search) {
       const q = garageState.search;
       const nameMatch = item.name.toLowerCase().includes(q);
@@ -4198,7 +4201,7 @@ function renderVehiclesTable(list) {
   if (!tbody) return;
 
   if (!list.length) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:36px; color:var(--text-muted); font-size:0.95rem;">🔍 ไม่พบข้อมูลทะเบียนรถที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-muted); font-size:0.95rem;">🔍 ไม่พบข้อมูลทะเบียนรถที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
     return;
   }
 
@@ -4232,9 +4235,21 @@ function renderVehiclesTable(list) {
         <td>
           <span class="source-badge ${sourceClass}">${sourceLabel}</span>
         </td>
+        <td style="text-align: center;">
+          <button class="btn-sm btn-secondary btn-action-edit" data-index="${item._originalIndex}" title="แก้ไขข้อมูลคันนี้">
+            <i class="fa-solid fa-pen-to-square"></i> แก้ไข
+          </button>
+        </td>
       </tr>
     `;
   }).join("");
+
+  tbody.querySelectorAll(".btn-action-edit").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = parseInt(btn.dataset.index, 10);
+      openEditVehicleModal(idx);
+    });
+  });
 }
 
 function renderMembersTable(list) {
@@ -4271,9 +4286,10 @@ function renderMembersTable(list) {
     const carPills = cars.map(c => {
       const conf = ALL_MODELS_CONFIG[c.model] || { name: c.model, color: "#38bdf8" };
       return `
-        <div style="display:inline-flex; align-items:center; gap:6px; background:var(--bg-surface); padding:4px 10px; border-radius:6px; border:1px solid var(--border-subtle); margin:2px 4px;">
+        <div class="member-car-chip" data-index="${c._originalIndex}" style="display:inline-flex; align-items:center; gap:6px; background:var(--bg-surface); padding:4px 10px; border-radius:6px; border:1px solid var(--border-subtle); margin:2px 4px; cursor:pointer;" title="คลิกเพื่อแก้ไขข้อมูลรถคันนี้">
           <span style="font-size:0.8rem; font-weight:700; color:${conf.color};">${conf.name}</span>
           <div class="plate-pill ${c.source === 'event8' ? 'event8' : ''}" style="padding:1px 6px; font-size:0.68rem;"><i class="fa-solid fa-id-card"></i> ${c.plate}</div>
+          <i class="fa-solid fa-pen" style="font-size:0.65rem; color:var(--text-muted);"></i>
         </div>
       `;
     }).join("");
@@ -4292,6 +4308,13 @@ function renderMembersTable(list) {
       </tr>
     `;
   }).join("");
+
+  tbody.querySelectorAll(".member-car-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const idx = parseInt(chip.dataset.index, 10);
+      openEditVehicleModal(idx);
+    });
+  });
 }
 
 function renderModelRosters(list) {
@@ -4332,7 +4355,7 @@ function renderModelRosters(list) {
       </div>
       <div class="model-roster-owners-list">
         ${owners.length ? owners.map((o, i) => `
-          <div class="model-owner-item">
+          <div class="model-owner-item" data-index="${o._originalIndex}" style="cursor:pointer;" title="คลิกเพื่อแก้ไขข้อมูลคันนี้">
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="color:var(--text-muted); font-size:0.75rem; min-width:20px;">${i + 1}.</span>
               <span class="model-owner-name">${o.name}</span>
@@ -4340,6 +4363,7 @@ function renderModelRosters(list) {
             <div style="display:flex; align-items:center; gap:6px;">
               <div class="plate-pill ${o.source === 'event8' ? 'event8' : ''}"><i class="fa-solid fa-id-card"></i> ${o.plate}</div>
               <span class="source-badge ${o.source === 'event8' ? 'event8' : 'existing'}">${o.source === 'event8' ? 'Event 8' : 'เดิม'}</span>
+              <i class="fa-solid fa-pen-to-square" style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;"></i>
             </div>
           </div>
         `).join("") : `<div style="color:var(--text-muted); text-align:center; padding:20px 0;">ไม่มีรายชื่อที่ตรงกับเงื่อนไข</div>`}
@@ -4348,13 +4372,19 @@ function renderModelRosters(list) {
 
     container.appendChild(card);
   });
+
+  container.querySelectorAll(".model-owner-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const idx = parseInt(item.dataset.index, 10);
+      openEditVehicleModal(idx);
+    });
+  });
 }
 
 function updateNextPlatePreview() {
-  const previewEl = document.getElementById("previewNewPlate");
-  if (previewEl) {
-    const nextPlate = getNextPlateNumber();
-    previewEl.innerHTML = `<i class="fa-solid fa-id-card"></i> ${nextPlate}`;
+  const plateInput = document.getElementById("newVehiclePlateInput");
+  if (plateInput) {
+    plateInput.value = getNextPlateNumber();
   }
 }
 
@@ -4367,7 +4397,7 @@ function populateMemberDataList() {
 }
 
 // ==========================================
-// 8. ADD NEW VEHICLE CONTROLLER (6-DIGIT PIN)
+// 8. ADD NEW VEHICLE CONTROLLER
 // ==========================================
 
 function setupAddVehicleModal() {
@@ -4376,10 +4406,12 @@ function setupAddVehicleModal() {
   const btnClose = document.getElementById("btnCloseAddVehicleModal");
   const btnCancel = document.getElementById("btnCancelAddVehicle");
   const btnSubmit = document.getElementById("btnSubmitNewVehicle");
+  const btnToggleCustomPlate = document.getElementById("btnToggleCustomPlate");
   const selectModel = document.getElementById("newVehicleModel");
   const customModelGroup = document.getElementById("customModelGroup");
   const customModelInput = document.getElementById("customModelInput");
   const ownerInput = document.getElementById("newVehicleOwner");
+  const plateInput = document.getElementById("newVehiclePlateInput");
   const oldPlateInput = document.getElementById("newVehicleOldPlate");
   const noteInput = document.getElementById("newVehicleNote");
   const pinInput = document.getElementById("addVehiclePinInput");
@@ -4393,6 +4425,14 @@ function setupAddVehicleModal() {
       } else {
         customModelGroup.classList.add("hidden");
       }
+    });
+  }
+
+  if (btnToggleCustomPlate && plateInput) {
+    btnToggleCustomPlate.addEventListener("click", () => {
+      AudioEngine.play('click');
+      plateInput.focus();
+      plateInput.select();
     });
   }
 
@@ -4426,6 +4466,7 @@ function setupAddVehicleModal() {
       if (modelName === "CUSTOM") {
         modelName = customModelInput.value.trim() || "Other";
       }
+      const plate = plateInput.value.trim() || getNextPlateNumber();
       const oldPlate = oldPlateInput.value.trim();
       const note = noteInput.value.trim() || "เพิ่มใหม่";
       const enteredPin = pinInput.value.trim();
@@ -4437,7 +4478,6 @@ function setupAddVehicleModal() {
         return;
       }
 
-      // Validate 6-Digit PIN
       if (!enteredPin || enteredPin !== MASTER_6DIGIT_PIN) {
         AudioEngine.play('error');
         pinError.classList.remove("hidden");
@@ -4447,11 +4487,8 @@ function setupAddVehicleModal() {
 
       pinError.classList.add("hidden");
 
-      // Generate next sequential plate
-      const nextPlate = getNextPlateNumber();
-
       const newVehicle = {
-        plate: nextPlate,
+        plate: plate,
         model: modelName,
         raw_model: modelName,
         name: ownerName,
@@ -4465,7 +4502,7 @@ function setupAddVehicleModal() {
       CloudSync.pushLatest();
 
       AudioEngine.play('success');
-      showToast(`🎉 ลงทะเบียน ${modelName} ป้ายทะเบียน [${nextPlate}] สำเร็จแล้ว!`, "success");
+      showToast(`🎉 ลงทะเบียน ${modelName} ป้ายทะเบียน [${plate}] สำเร็จแล้ว!`, "success");
 
       closeModal();
       renderAll();
@@ -4474,7 +4511,174 @@ function setupAddVehicleModal() {
 }
 
 // ==========================================
-// 9. EXPORT HANDLERS
+// 9. EDIT & DELETE VEHICLE CONTROLLER (ADMIN)
+// ==========================================
+
+function openEditVehicleModal(index) {
+  const item = garageState.vehicles[index];
+  if (!item) return;
+
+  const modal = document.getElementById("editVehicleModal");
+  const editIndexInput = document.getElementById("editVehicleIndex");
+  const ownerInput = document.getElementById("editVehicleOwner");
+  const selectModel = document.getElementById("editVehicleModel");
+  const customGroup = document.getElementById("editCustomModelGroup");
+  const customInput = document.getElementById("editCustomModelInput");
+  const plateInput = document.getElementById("editVehiclePlate");
+  const oldPlateInput = document.getElementById("editVehicleOldPlate");
+  const noteInput = document.getElementById("editVehicleNote");
+  const pinInput = document.getElementById("editVehiclePinInput");
+  const pinError = document.getElementById("editVehiclePinError");
+
+  AudioEngine.play('click');
+  editIndexInput.value = index;
+  ownerInput.value = item.name || "";
+  plateInput.value = item.plate || "";
+  oldPlateInput.value = item.old_plate || "";
+  noteInput.value = item.note || "";
+  pinInput.value = "";
+  pinError.classList.add("hidden");
+
+  // Check if model in standard dropdown
+  if (ALL_MODELS_CONFIG[item.model] && item.model !== "Other") {
+    selectModel.value = item.model;
+    customGroup.classList.add("hidden");
+    customInput.value = "";
+  } else {
+    selectModel.value = "CUSTOM";
+    customGroup.classList.remove("hidden");
+    customInput.value = item.model || "";
+  }
+
+  modal.classList.remove("hidden");
+  setTimeout(() => ownerInput.focus(), 100);
+}
+
+function setupEditVehicleModal() {
+  const modal = document.getElementById("editVehicleModal");
+  const btnClose = document.getElementById("btnCloseEditVehicleModal");
+  const btnCancel = document.getElementById("btnCancelEditVehicle");
+  const btnSave = document.getElementById("btnSaveEditVehicle");
+  const btnDelete = document.getElementById("btnDeleteVehicle");
+  const selectModel = document.getElementById("editVehicleModel");
+  const customGroup = document.getElementById("editCustomModelGroup");
+  const customInput = document.getElementById("editCustomModelInput");
+  const editIndexInput = document.getElementById("editVehicleIndex");
+  const ownerInput = document.getElementById("editVehicleOwner");
+  const plateInput = document.getElementById("editVehiclePlate");
+  const oldPlateInput = document.getElementById("editVehicleOldPlate");
+  const noteInput = document.getElementById("editVehicleNote");
+  const pinInput = document.getElementById("editVehiclePinInput");
+  const pinError = document.getElementById("editVehiclePinError");
+
+  const closeModal = () => {
+    AudioEngine.play('click');
+    modal.classList.add("hidden");
+  };
+
+  if (btnClose) btnClose.addEventListener("click", closeModal);
+  if (btnCancel) btnCancel.addEventListener("click", closeModal);
+
+  if (selectModel && customGroup) {
+    selectModel.addEventListener("change", () => {
+      if (selectModel.value === "CUSTOM") {
+        customGroup.classList.remove("hidden");
+        customInput.focus();
+      } else {
+        customGroup.classList.add("hidden");
+      }
+    });
+  }
+
+  if (btnSave) {
+    btnSave.addEventListener("click", () => {
+      const idx = parseInt(editIndexInput.value, 10);
+      if (isNaN(idx) || idx < 0 || idx >= garageState.vehicles.length) return;
+
+      const ownerName = ownerInput.value.trim();
+      let modelName = selectModel.value;
+      if (modelName === "CUSTOM") {
+        modelName = customInput.value.trim() || "Other";
+      }
+      const plate = plateInput.value.trim();
+      const oldPlate = oldPlateInput.value.trim();
+      const note = noteInput.value.trim();
+      const enteredPin = pinInput.value.trim();
+
+      if (!ownerName) {
+        AudioEngine.play('error');
+        showToast("กรุณากรอกชื่อผู้ครอบครอง", "error");
+        ownerInput.focus();
+        return;
+      }
+
+      if (!plate) {
+        AudioEngine.play('error');
+        showToast("กรุณาระบุเลขป้ายทะเบียน", "error");
+        plateInput.focus();
+        return;
+      }
+
+      if (!enteredPin || enteredPin !== MASTER_6DIGIT_PIN) {
+        AudioEngine.play('error');
+        pinError.classList.remove("hidden");
+        pinInput.focus();
+        return;
+      }
+
+      pinError.classList.add("hidden");
+
+      // Update vehicle record
+      garageState.vehicles[idx].name = ownerName;
+      garageState.vehicles[idx].model = modelName;
+      garageState.vehicles[idx].raw_model = modelName;
+      garageState.vehicles[idx].plate = plate;
+      garageState.vehicles[idx].old_plate = oldPlate;
+      garageState.vehicles[idx].note = note;
+
+      saveLocalVehicles(garageState.vehicles);
+      CloudSync.pushLatest();
+
+      AudioEngine.play('success');
+      showToast(`💾 บันทึกการแก้ไขข้อมูล [${plate}] เรียบร้อยแล้ว`, "success");
+
+      closeModal();
+      renderAll();
+    });
+  }
+
+  if (btnDelete) {
+    btnDelete.addEventListener("click", () => {
+      const idx = parseInt(editIndexInput.value, 10);
+      if (isNaN(idx) || idx < 0 || idx >= garageState.vehicles.length) return;
+
+      const enteredPin = pinInput.value.trim();
+      if (!enteredPin || enteredPin !== MASTER_6DIGIT_PIN) {
+        AudioEngine.play('error');
+        pinError.classList.remove("hidden");
+        pinInput.focus();
+        return;
+      }
+
+      const item = garageState.vehicles[idx];
+      const confirmDelete = confirm(`⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบรายการรถ "${item.model} (${item.plate}) ของ ${item.name}" ออกจากระบบ?`);
+      if (!confirmDelete) return;
+
+      garageState.vehicles.splice(idx, 1);
+      saveLocalVehicles(garageState.vehicles);
+      CloudSync.pushLatest();
+
+      AudioEngine.play('success');
+      showToast(`🗑️ ลบรายการรถ [${item.plate}] ออกจากระบบเรียบร้อยแล้ว`, "info");
+
+      closeModal();
+      renderAll();
+    });
+  }
+}
+
+// ==========================================
+// 10. EXPORT HANDLERS
 // ==========================================
 
 function copyMasterDataDiscord() {
@@ -4528,7 +4732,7 @@ function exportMasterDataCSV() {
 }
 
 // ==========================================
-// 10. INITIALIZATION
+// 11. INITIALIZATION
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -4619,7 +4823,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Setup Modals
   setupAddVehicleModal();
+  setupEditVehicleModal();
 
   const cloudCard = document.getElementById("cloudSyncStatusCard");
   if (cloudCard) {

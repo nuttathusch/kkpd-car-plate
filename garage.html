@@ -163,12 +163,13 @@
             <table class="styled-table master-table">
               <thead>
                 <tr>
-                  <th style="width: 70px; text-align: center;">ลำดับ</th>
-                  <th style="width: 140px; text-align: center;">ป้ายทะเบียน</th>
-                  <th style="width: 170px;">รุ่นรถ</th>
+                  <th style="width: 60px; text-align: center;">ลำดับ</th>
+                  <th style="width: 130px; text-align: center;">ป้ายทะเบียน</th>
+                  <th style="width: 160px;">รุ่นรถ</th>
                   <th>ชื่อผู้ครอบครอง</th>
-                  <th style="width: 130px; text-align: center;">ทะเบียนเดิม</th>
-                  <th style="width: 160px;">ที่มา / หมายเหตุ</th>
+                  <th style="width: 140px; text-align: center;">ทะเบียนเดิม (เกมสุ่ม)</th>
+                  <th style="width: 150px;">ที่มา / หมายเหตุ</th>
+                  <th style="width: 100px; text-align: center;">จัดการ</th>
                 </tr>
               </thead>
               <tbody id="masterVehiclesTableBody">
@@ -184,11 +185,11 @@
             <table class="styled-table master-table">
               <thead>
                 <tr>
-                  <th style="width: 70px; text-align: center;">ลำดับ</th>
+                  <th style="width: 60px; text-align: center;">ลำดับ</th>
                   <th>รายชื่อสมาชิก</th>
-                  <th style="width: 120px; text-align: center;">จำนวนรถ</th>
+                  <th style="width: 110px; text-align: center;">จำนวนรถ</th>
                   <th>รายการรถและป้ายทะเบียนที่ครอบครอง</th>
-                  <th style="width: 160px;">ที่มา</th>
+                  <th style="width: 150px;">ที่มา</th>
                 </tr>
               </thead>
               <tbody id="masterMembersTableBody">
@@ -227,7 +228,7 @@
   <div id="addVehicleModal" class="modal-overlay hidden">
     <div class="modal-card modal-lg">
       <div class="modal-header">
-        <h3><i class="fa-solid fa-car-burst" style="color:var(--accent-cyan);"></i> เพิ่มข้อมูลรถใหม่ (ลงทะเบียนป้ายต่อ)</h3>
+        <h3><i class="fa-solid fa-car-burst" style="color:var(--accent-cyan);"></i> เพิ่มข้อมูลรถใหม่ (ลงทะเบียนป้าย)</h3>
         <button id="btnCloseAddVehicleModal" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
@@ -280,29 +281,32 @@
             <input type="text" id="customModelInput" class="styled-input" placeholder="พิมพ์ชื่อรุ่นรถ เช่น Supra, GTR, Ferrari...">
           </div>
 
-          <!-- Field 3: Auto Plate Preview -->
-          <div class="form-group">
-            <label class="form-label">
-              <i class="fa-solid fa-id-card"></i> 3. ป้ายทะเบียนที่จะได้รับ (รันเลขอัตโนมัติ)
-            </label>
+          <!-- Field 3: KKPD Plate (Auto-run with manual override) -->
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label for="newVehiclePlateInput" class="form-label" style="margin-bottom:0;">
+                <i class="fa-solid fa-id-card"></i> 3. ป้ายทะเบียนระบบ KKPD <span class="required">*</span>
+              </label>
+              <button type="button" id="btnToggleCustomPlate" class="btn-sm btn-secondary" style="font-size:0.75rem; padding:3px 8px;">
+                <i class="fa-solid fa-pen"></i> กำหนดเลขเอง
+              </button>
+            </div>
             <div class="auto-plate-display-box">
-              <div class="plate-pill" id="previewNewPlate" style="font-size: 1.1rem; padding: 6px 14px;">
-                <i class="fa-solid fa-id-card"></i> KKPD 427
-              </div>
-              <span class="auto-plate-hint"><i class="fa-solid fa-wand-magic-sparkles"></i> เลขทะเบียนจะรันต่อจากคันล่าสุดอัตโนมัติ ไม่มีการล็อคเลข</span>
+              <input type="text" id="newVehiclePlateInput" class="styled-input" style="max-width: 180px; font-family: var(--font-heading); font-weight:800; color:#fde047; text-align:center; font-size:1.05rem;" value="KKPD 427">
+              <span class="auto-plate-hint" id="autoPlateHint"><i class="fa-solid fa-wand-magic-sparkles"></i> รันต่อจากคันล่าสุดอัตโนมัติ (หรือคลิก "กำหนดเลขเอง" เพื่อพิมพ์เลขเฉพาะ)</span>
             </div>
           </div>
 
-          <!-- Field 4: Old Plate (Optional) -->
+          <!-- Field 4: Old Plate From Game -->
           <div class="form-group">
             <label for="newVehicleOldPlate" class="form-label">
-              <i class="fa-solid fa-clock-rotate-left"></i> 4. ทะเบียนเดิม (ถ้ามี)
+              <i class="fa-solid fa-clock-rotate-left"></i> 4. ทะเบียนเดิมที่เกมสุ่มให้ (ก่อนเปลี่ยนเลข)
             </label>
-            <input type="text" id="newVehicleOldPlate" class="styled-input" placeholder="เช่น DZHB 481 (ไม่บังคับ)">
+            <input type="text" id="newVehicleOldPlate" class="styled-input" placeholder="เช่น DZHB 481, OFKH 751 (ไม่บังคับ)">
           </div>
 
           <!-- Field 5: Note -->
-          <div class="form-group" style="grid-column: 1 / -1;">
+          <div class="form-group">
             <label for="newVehicleNote" class="form-label">
               <i class="fa-solid fa-comment-dots"></i> 5. ที่มา / หมายเหตุ
             </label>
@@ -336,6 +340,118 @@
     </div>
   </div>
 
-  <script src="garage.js?v=2.3"></script>
+  <!-- ================= EDIT VEHICLE MODAL ================= -->
+  <div id="editVehicleModal" class="modal-overlay hidden">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen-to-square" style="color:var(--accent-amber);"></i> แก้ไขข้อมูลรถ & ทะเบียน (Admin Edit)</h3>
+        <button id="btnCloseEditVehicleModal" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" id="editVehicleIndex" value="-1">
+
+        <div class="add-vehicle-grid">
+          
+          <!-- Field 1: Member Name -->
+          <div class="form-group">
+            <label for="editVehicleOwner" class="form-label">
+              <i class="fa-solid fa-user"></i> 1. ชื่อผู้ครอบครอง / สมาชิก <span class="required">*</span>
+            </label>
+            <input type="text" id="editVehicleOwner" class="styled-input" placeholder="ชื่อผู้เล่น..." autocomplete="off">
+          </div>
+
+          <!-- Field 2: Car Model -->
+          <div class="form-group">
+            <label for="editVehicleModel" class="form-label">
+              <i class="fa-solid fa-car"></i> 2. รุ่นรถ <span class="required">*</span>
+            </label>
+            <div class="custom-select-wrapper">
+              <select id="editVehicleModel" class="styled-select">
+                <option value="Sugoi">Sugoi (Civic Type-R)</option>
+                <option value="Visione">Visione</option>
+                <option value="R32">Elegy R32 (Nissan Skyline)</option>
+                <option value="Banshee">Banshee 900R</option>
+                <option value="T20">Progen T20</option>
+                <option value="C8">Corvette C8</option>
+                <option value="Corsita">Lampadati Corsita</option>
+                <option value="Furia">Grotti Furia</option>
+                <option value="I8">BMW i8</option>
+                <option value="Turismo3">Turismo 3</option>
+                <option value="Kuruma">Kuruma</option>
+                <option value="Thrax">Trufade Thrax</option>
+                <option value="Mustang">Mustang</option>
+                <option value="ADMTour">ADM Tour Bus</option>
+                <option value="CUSTOM">➕ รุ่นอื่นๆ (พิมพ์ระบุเอง)</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+          </div>
+
+          <!-- Custom Model Input for Edit -->
+          <div id="editCustomModelGroup" class="form-group hidden" style="grid-column: 1 / -1;">
+            <label for="editCustomModelInput" class="form-label">
+              <i class="fa-solid fa-pen-nib"></i> ระบุชื่อรุ่นรถ:
+            </label>
+            <input type="text" id="editCustomModelInput" class="styled-input" placeholder="พิมพ์ชื่อรุ่นรถ เช่น Supra, GTR, Ferrari...">
+          </div>
+
+          <!-- Field 3: KKPD Plate -->
+          <div class="form-group">
+            <label for="editVehiclePlate" class="form-label">
+              <i class="fa-solid fa-id-card"></i> 3. ป้ายทะเบียนระบบ KKPD <span class="required">*</span>
+            </label>
+            <input type="text" id="editVehiclePlate" class="styled-input" style="font-family: var(--font-heading); font-weight:800; color:#fde047;" placeholder="เช่น KKPD 407">
+          </div>
+
+          <!-- Field 4: Old Plate From Game -->
+          <div class="form-group">
+            <label for="editVehicleOldPlate" class="form-label">
+              <i class="fa-solid fa-clock-rotate-left"></i> 4. ทะเบียนเดิมที่เกมสุ่มให้ (ก่อนเปลี่ยนเลข)
+            </label>
+            <input type="text" id="editVehicleOldPlate" class="styled-input" placeholder="เช่น DZHB 481 (ไม่บังคับ)">
+          </div>
+
+          <!-- Field 5: Note -->
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="editVehicleNote" class="form-label">
+              <i class="fa-solid fa-comment-dots"></i> 5. ที่มา / หมายเหตุ
+            </label>
+            <input type="text" id="editVehicleNote" class="styled-input" placeholder="เช่น Event 8, ซื้อในเมือง, โอนย้าย">
+          </div>
+
+          <!-- Field 6: 6-Digit PIN Security Gate -->
+          <div class="form-group pin-security-section" style="grid-column: 1 / -1;">
+            <label for="editVehiclePinInput" class="form-label">
+              <i class="fa-solid fa-shield-halved" style="color:var(--accent-amber);"></i> 6. กรอกรหัส PIN 6 หลัก เพื่อยืนยันการแก้ไข <span class="required">*</span>
+            </label>
+            <div class="pin-input-row" style="max-width: 320px;">
+              <div class="pin-input-wrapper">
+                <i class="fa-solid fa-key pin-icon"></i>
+                <input type="password" id="editVehiclePinInput" class="styled-input pin-input" maxlength="6" placeholder="••••••" inputmode="numeric" autocomplete="off">
+              </div>
+            </div>
+            <div id="editVehiclePinError" class="pin-error-msg hidden" style="margin-top: 8px;">
+              <i class="fa-solid fa-triangle-exclamation"></i> รหัส PIN 6 หลักไม่ถูกต้อง (รหัสเริ่มต้น: 993600)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="justify-content: space-between;">
+        <button id="btnDeleteVehicle" class="btn-danger">
+          <i class="fa-solid fa-trash-can"></i> ลบรายการรถนี้
+        </button>
+        <div style="display: flex; gap: 10px;">
+          <button id="btnSaveEditVehicle" class="btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> บันทึกการแก้ไข
+          </button>
+          <button id="btnCancelEditVehicle" class="btn-secondary">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="garage.js?v=2.4"></script>
 </body>
 </html>

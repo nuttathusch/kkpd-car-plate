@@ -2356,4 +2356,38 @@ body {
   box-shadow: 0 4px 14px var(--accent-cyan-glow);
 }
 
+.btn-action-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--accent-amber);
+  font-weight: 600;
+  transition: var(--trans-fast);
+}
+
+.btn-action-edit:hover {
+  background: var(--accent-amber);
+  color: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+.member-car-chip {
+  transition: var(--trans-fast);
+}
+
+.member-car-chip:hover {
+  border-color: var(--accent-amber) !important;
+  background: var(--bg-surface-active) !important;
+  transform: translateY(-1px);
+}
+
+.model-owner-item:hover {
+  border-color: var(--accent-amber) !important;
+  background: var(--bg-surface-active) !important;
+}
+
+
 
