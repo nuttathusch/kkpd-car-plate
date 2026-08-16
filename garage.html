@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KKPD Gang | ฐานข้อมูลทะเบียนรถ & โรงรถส่วนกลาง (Master Garage)</title>
+  <meta name="description" content="ระบบฐานข้อมูลการครอบครองรถและป้ายทะเบียนรถสมาชิกแก๊ง KKPD ครบถ้วนทุกรุ่น พร้อมระบบลงทะเบียนรถใหม่">
+  
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <!-- Google Fonts: Prompt & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css?v=2.3">
+</head>
+<body>
+  <div class="app-background">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="brand-badge" style="background: rgba(0, 240, 255, 0.12); color: var(--accent-cyan); border-color: rgba(0, 240, 255, 0.3);">
+          <i class="fa-solid fa-car-tunnel"></i>
+          <span>KKPD MASTER GARAGE & VEHICLE REGISTRY</span>
+        </div>
+        <h1 class="main-title">ฐานข้อมูลทะเบียนรถสมาชิกแก๊ง</h1>
+        <p class="main-subtitle">
+          รวบรวมข้อมูลรถทุกรุ่น ป้ายทะเบียน และผู้ถือครองทั้งหมดในแก๊ง KKPD พร้อมระบบรันเลขทะเบียนใหม่อัตโนมัติ
+        </p>
+      </div>
+
+      <div class="header-stats">
+        <div class="stat-card cloud-sync-card" id="cloudSyncStatusCard" title="สถานะการซิงค์ข้อมูลกับ Cloud ส่วนกลาง (คลิกเพื่อดึงข้อมูลล่าสุด)">
+          <div class="stat-icon cloud-stat"><i class="fa-solid fa-cloud-arrow-up" id="cloudIcon"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">ระบบ Cloud Real-time</span>
+            <div class="stat-value cloud-status-text" id="cloudStatusText">ออนไลน์ ✓</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05);">
+          <div class="stat-icon" style="color: var(--accent-amber);"><i class="fa-solid fa-id-card"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">ป้ายทะเบียนถัดไปที่จะได้</span>
+            <div class="stat-value" id="headerNextPlate" style="color: #fde047; font-family: var(--font-heading);">KKPD 427</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon car-stat"><i class="fa-solid fa-car"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">รถในระบบทั้งหมด</span>
+            <div class="stat-value"><span id="headerTotalCars">427</span> <span class="stat-unit">คัน</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Top Action Navigation Bar -->
+    <div class="garage-nav-bar">
+      <div class="nav-left-actions">
+        <a href="index.html" class="btn-secondary btn-sm" style="text-decoration: none;">
+          <i class="fa-solid fa-trophy"></i>
+          <span>ไประบบจัดสรรของรางวัล (Prize App)</span>
+        </a>
+      </div>
+      <div class="nav-right-actions">
+        <button id="btnOpenAddVehicleModal" class="btn-primary">
+          <i class="fa-solid fa-plus-circle"></i>
+          <span>เพิ่มข้อมูลรถใหม่ (รันทะเบียนต่อ)</span>
+        </button>
+        <button id="btnCopyMasterDiscord" class="btn-accent btn-sm">
+          <i class="fa-brands fa-discord"></i> คัดลอกลง Discord
+        </button>
+        <button id="btnExportMasterCSV" class="btn-secondary btn-sm">
+          <i class="fa-solid fa-file-csv"></i> ส่งออกไฟล์ CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="content-wrapper">
+      <section id="tab-masterdata" class="tab-content active" style="display: block;">
+        
+        <!-- Master Data Stats Grid -->
+        <div class="master-stats-grid">
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-cyan); background:rgba(0,240,255,0.12)"><i class="fa-solid fa-car-side"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">รถในระบบทั้งหมด</span>
+              <div class="master-stat-val" id="statTotalCars">427 <small>คัน</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-purple); background:rgba(168,85,247,0.12)"><i class="fa-solid fa-users"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">จำนวนผู้ครอบครอง</span>
+              <div class="master-stat-val" id="statTotalMembers">306 <small>คน</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-amber); background:rgba(245,158,11,0.12)"><i class="fa-solid fa-trophy"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">จากกิจกรรม Event ครั้งที่ 8</span>
+              <div class="master-stat-val">20 <small>คัน</small></div>
+            </div>
+          </div>
+          <div class="master-stat-card">
+            <div class="master-stat-icon" style="color:var(--accent-emerald); background:rgba(16,185,129,0.12)"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="master-stat-info">
+              <span class="master-stat-label">สมาชิกที่ถือครอง 2+ คัน</span>
+              <div class="master-stat-val" id="statMultiCarMembers">68 <small>คน</small></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Car Model Badges Row -->
+        <div class="master-car-badges-row" id="masterCarBadgesRow">
+          <!-- Populated dynamically with all car models -->
+        </div>
+
+        <!-- Master Data Search & Filter Controls -->
+        <div class="master-filter-card">
+          <div class="master-search-row">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="masterSearchInput" class="styled-input search-input" placeholder="🔍 ค้นหาชื่อสมาชิก, เลขทะเบียน (เช่น KKPD 407, 00, 111), ทะเบียนเดิม, หรือรุ่นรถ...">
+              <button id="btnClearSearch" class="btn-clear-search hidden"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="master-view-toggle">
+              <button id="btnViewVehicles" class="btn-toggle active" title="มุมมองทะเบียนรถทั้งหมด">
+                <i class="fa-solid fa-list-ol"></i> ทะเบียนรถทั้งหมด (<span id="countViewVehicles">427</span>)
+              </button>
+              <button id="btnViewMembers" class="btn-toggle" title="มุมมองสรุปรายชื่อสมาชิก">
+                <i class="fa-solid fa-users"></i> แยกตามสมาชิก (<span id="countViewMembers">306</span>)
+              </button>
+              <button id="btnViewModel" class="btn-toggle" title="มุมมองแยกตามรุ่นรถ">
+                <i class="fa-solid fa-grip"></i> แยกตามรุ่นรถ (<span id="countViewModel">14</span>)
+              </button>
+            </div>
+          </div>
+
+          <div class="master-filter-chips" id="masterFilterChips">
+            <!-- Dynamically generated filter chips -->
+          </div>
+        </div>
+
+        <!-- View 1: All Vehicles List (427+ Cars) -->
+        <div id="masterVehiclesView" class="master-view-container">
+          <div class="table-container">
+            <table class="styled-table master-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px; text-align: center;">ลำดับ</th>
+                  <th style="width: 140px; text-align: center;">ป้ายทะเบียน</th>
+                  <th style="width: 170px;">รุ่นรถ</th>
+                  <th>ชื่อผู้ครอบครอง</th>
+                  <th style="width: 130px; text-align: center;">ทะเบียนเดิม</th>
+                  <th style="width: 160px;">ที่มา / หมายเหตุ</th>
+                </tr>
+              </thead>
+              <tbody id="masterVehiclesTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- View 2: Grouped by Member Summary (306+ Members) -->
+        <div id="masterMembersView" class="master-view-container hidden">
+          <div class="table-container">
+            <table class="styled-table master-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px; text-align: center;">ลำดับ</th>
+                  <th>รายชื่อสมาชิก</th>
+                  <th style="width: 120px; text-align: center;">จำนวนรถ</th>
+                  <th>รายการรถและป้ายทะเบียนที่ครอบครอง</th>
+                  <th style="width: 160px;">ที่มา</th>
+                </tr>
+              </thead>
+              <tbody id="masterMembersTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- View 3: Grouped by Car Model Grid (14+ Models) -->
+        <div id="masterModelView" class="master-view-container hidden">
+          <div class="model-roster-grid" id="modelRosterGrid">
+            <!-- Populated dynamically with 14 model cards -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="footer-content">
+        <p>🚗 KKPD Master Garage Registry • ฐานข้อมูลทะเบียนรถแก๊ง KKPD</p>
+        <div class="footer-links">
+          <button id="btnSoundToggle" class="btn-icon" title="เปิด/ปิดเสียงเอฟเฟกต์">
+            <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+          </button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- ================= ADD NEW VEHICLE MODAL ================= -->
+  <div id="addVehicleModal" class="modal-overlay hidden">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-car-burst" style="color:var(--accent-cyan);"></i> เพิ่มข้อมูลรถใหม่ (ลงทะเบียนป้ายต่อ)</h3>
+        <button id="btnCloseAddVehicleModal" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="add-vehicle-grid">
+          
+          <!-- Field 1: Member Name -->
+          <div class="form-group">
+            <label for="newVehicleOwner" class="form-label">
+              <i class="fa-solid fa-user"></i> 1. ชื่อผู้ครอบครอง / สมาชิก <span class="required">*</span>
+            </label>
+            <input type="text" id="newVehicleOwner" class="styled-input" placeholder="พิมพ์ชื่อผู้เล่น เช่น Txrbo, Baron, Ainz..." autocomplete="off" list="membersDataList">
+            <datalist id="membersDataList">
+              <!-- Dynamically populated with existing member names -->
+            </datalist>
+          </div>
+
+          <!-- Field 2: Car Model -->
+          <div class="form-group">
+            <label for="newVehicleModel" class="form-label">
+              <i class="fa-solid fa-car"></i> 2. รุ่นรถ <span class="required">*</span>
+            </label>
+            <div class="custom-select-wrapper">
+              <select id="newVehicleModel" class="styled-select">
+                <option value="Sugoi">Sugoi (Civic Type-R)</option>
+                <option value="Visione">Visione</option>
+                <option value="R32">Elegy R32 (Nissan Skyline)</option>
+                <option value="Banshee">Banshee 900R</option>
+                <option value="T20">Progen T20</option>
+                <option value="C8">Corvette C8</option>
+                <option value="Corsita">Lampadati Corsita</option>
+                <option value="Furia">Grotti Furia</option>
+                <option value="I8">BMW i8</option>
+                <option value="Turismo3">Turismo 3</option>
+                <option value="Kuruma">Kuruma</option>
+                <option value="Thrax">Trufade Thrax</option>
+                <option value="Mustang">Mustang</option>
+                <option value="ADMTour">ADM Tour Bus</option>
+                <option value="CUSTOM">➕ รุ่นอื่นๆ (พิมพ์ระบุเอง)</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+          </div>
+
+          <!-- Custom Model Input (Hidden by default) -->
+          <div id="customModelGroup" class="form-group hidden" style="grid-column: 1 / -1;">
+            <label for="customModelInput" class="form-label">
+              <i class="fa-solid fa-pen-nib"></i> ระบุชื่อรุ่นรถ:
+            </label>
+            <input type="text" id="customModelInput" class="styled-input" placeholder="พิมพ์ชื่อรุ่นรถ เช่น Supra, GTR, Ferrari...">
+          </div>
+
+          <!-- Field 3: Auto Plate Preview -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fa-solid fa-id-card"></i> 3. ป้ายทะเบียนที่จะได้รับ (รันเลขอัตโนมัติ)
+            </label>
+            <div class="auto-plate-display-box">
+              <div class="plate-pill" id="previewNewPlate" style="font-size: 1.1rem; padding: 6px 14px;">
+                <i class="fa-solid fa-id-card"></i> KKPD 427
+              </div>
+              <span class="auto-plate-hint"><i class="fa-solid fa-wand-magic-sparkles"></i> เลขทะเบียนจะรันต่อจากคันล่าสุดอัตโนมัติ ไม่มีการล็อคเลข</span>
+            </div>
+          </div>
+
+          <!-- Field 4: Old Plate (Optional) -->
+          <div class="form-group">
+            <label for="newVehicleOldPlate" class="form-label">
+              <i class="fa-solid fa-clock-rotate-left"></i> 4. ทะเบียนเดิม (ถ้ามี)
+            </label>
+            <input type="text" id="newVehicleOldPlate" class="styled-input" placeholder="เช่น DZHB 481 (ไม่บังคับ)">
+          </div>
+
+          <!-- Field 5: Note -->
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="newVehicleNote" class="form-label">
+              <i class="fa-solid fa-comment-dots"></i> 5. ที่มา / หมายเหตุ
+            </label>
+            <input type="text" id="newVehicleNote" class="styled-input" placeholder="เช่น ซื้อในเมือง, กิจกรรมพิเศษ, Tebex (ค่าเริ่มต้น: เพิ่มใหม่)">
+          </div>
+
+          <!-- Field 6: 6-Digit PIN Security Gate -->
+          <div class="form-group pin-security-section" style="grid-column: 1 / -1;">
+            <label for="addVehiclePinInput" class="form-label">
+              <i class="fa-solid fa-shield-halved" style="color:var(--accent-amber);"></i> 6. กรอกรหัส PIN 6 หลัก (เพื่อยืนยันสิทธิ์ในการเพิ่มข้อมูล) <span class="required">*</span>
+            </label>
+            <div class="pin-input-row" style="max-width: 320px;">
+              <div class="pin-input-wrapper">
+                <i class="fa-solid fa-key pin-icon"></i>
+                <input type="password" id="addVehiclePinInput" class="styled-input pin-input" maxlength="6" placeholder="••••••" inputmode="numeric" autocomplete="off">
+              </div>
+            </div>
+            <div id="addVehiclePinError" class="pin-error-msg hidden" style="margin-top: 8px;">
+              <i class="fa-solid fa-triangle-exclamation"></i> รหัส PIN 6 หลักไม่ถูกต้อง (รหัสเริ่มต้น: 993600)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btnSubmitNewVehicle" class="btn-primary btn-large">
+          <i class="fa-solid fa-circle-check"></i> บันทึกข้อมูลและออกป้ายทะเบียน
+        </button>
+        <button id="btnCancelAddVehicle" class="btn-secondary">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="garage.js?v=2.3"></script>
+</body>
+</html>
