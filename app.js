@@ -186,25 +186,29 @@ const CloudSync = {
       if (res.ok) {
         const cloudData = await res.json();
         if (cloudData && typeof cloudData === 'object') {
-          const cloudTime = cloudData.lastUpdated || 0;
-          if (cloudTime > (state.lastUpdated || 0) || Object.keys(state.preferences).length === 0) {
-            state.preferences = { ...(cloudData.preferences || {}) };
-            state.submissions = { ...(cloudData.submissions || {}) };
-            if (cloudData.pins) state.pins = { ...DEFAULT_PINS, ...cloudData.pins };
-            state.lastUpdated = cloudTime;
-            saveState();
-            renderFullState();
-            initUI();
-            if (!silent) showToast("🔄 ซิงค์ข้อมูลล่าสุดจาก Cloud เรียบร้อยแล้ว", "success");
-          }
+          // Merge preferences and submissions safely
+          state.preferences = { ...state.preferences, ...(cloudData.preferences || {}) };
+          state.submissions = { ...state.submissions, ...(cloudData.submissions || {}) };
+          if (cloudData.pins) state.pins = { ...DEFAULT_PINS, ...state.pins, ...cloudData.pins };
+          state.lastUpdated = Math.max(state.lastUpdated || 0, cloudData.lastUpdated || 0);
+
+          saveState();
+          renderFullState();
+          initUI();
           this.updateIndicator('online');
+          if (!silent) {
+            AudioEngine.play('success');
+            showToast("🔄 ซิงค์ข้อมูลกับ Cloud สำเร็จ! (ข้อมูลอัปเดตตรงกันแล้ว)", "success");
+          }
+          return true;
         }
-      } else {
-        this.updateIndicator('online');
       }
+      this.updateIndicator('online');
+      if (!silent) showToast("🔄 ข้อมูลเป็นปัจจุบันแล้ว", "info");
     } catch (err) {
       console.warn("Cloud Sync fetch issue:", err);
       this.updateIndicator('offline');
+      if (!silent) showToast("⚠️ ไม่สามารถติดต่อ Cloud ได้ กรุณาลองใหม่อีกครั้ง", "error");
     } finally {
       this.isSyncing = false;
     }
@@ -215,20 +219,35 @@ const CloudSync = {
     state.lastUpdated = Date.now();
     saveState();
 
-    const payload = {
-      version: 2,
-      lastUpdated: state.lastUpdated,
-      preferences: state.preferences,
-      submissions: state.submissions,
-      pins: state.pins
-    };
-
     try {
+      // First fetch latest remote data to merge other players' picks
+      try {
+        const checkRes = await fetch(CLOUD_SYNC_URL + '?_t=' + Date.now(), { cache: 'no-store' });
+        if (checkRes.ok) {
+          const remote = await checkRes.json();
+          if (remote && remote.preferences) {
+            state.preferences = { ...remote.preferences, ...state.preferences };
+            state.submissions = { ...remote.submissions, ...state.submissions };
+          }
+        }
+      } catch (e) {
+        // ignore fetch error on pre-check
+      }
+
+      const payload = {
+        version: 2,
+        lastUpdated: Date.now(),
+        preferences: state.preferences,
+        submissions: state.submissions,
+        pins: state.pins
+      };
+
       const res = await fetch(CLOUD_SYNC_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+
       if (res.ok) {
         this.updateIndicator('online');
       } else {
@@ -1372,6 +1391,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
+  }
+
+  // Click handler on header Cloud Sync badge
+  const cloudCard = document.getElementById("cloudSyncStatusCard");
+  if (cloudCard) {
+    cloudCard.style.cursor = "pointer";
+    cloudCard.addEventListener("click", () => {
+      AudioEngine.play('click');
+      CloudSync.fetchLatest(false);
+    });
   }
 
   // Initial fetch from central Cloud Database
